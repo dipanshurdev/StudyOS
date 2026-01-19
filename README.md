@@ -41,7 +41,7 @@ A modern SaaS platform that helps students study faster using AI. Built with Nex
 - **AI**: Groq API (llama-3.1-8b) + HuggingFace fallback
 - **Hosting**: Optimized for Vercel free tier
 
-## Getting Started
+<!-- ## Getting Started
 
 ### 1. Prerequisites
 
@@ -251,7 +251,7 @@ vercel
 ```bash
 npm run build
 npm start
-```
+``` -->
 
 ## Support
 
