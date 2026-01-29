@@ -1,6 +1,6 @@
 # StudyOS - AI-Powered Study Platform
 
-A modern SaaS platform that helps students study faster using AI. Built with Next.js, MongoDB, and free AI APIs.
+A modern SaaS platform that helps students study faster using AI. Built with Next.js, Supabase, and free AI APIs.
 
 ## Features
 
@@ -29,14 +29,14 @@ A modern SaaS platform that helps students study faster using AI. Built with Nex
 - **Zero Cost**
   - Free tier with no credit card required
   - Uses free APIs: Groq (primary), HuggingFace (fallback)
-  - MongoDB Atlas (free tier)
+  - Supabase Atlas (free tier)
   - Vercel hosting (free tier compatible)
 
 ## Tech Stack
 
 - **Frontend**: Next.js 16, React 19, TypeScript
 - **Styling**: Tailwind CSS v4, shadcn/ui
-- **Database**: MongoDB Atlas (free tier)
+- **Database**: Supabase Atlas (free tier)
 - **Authentication**: NextAuth.js with Google OAuth & Email
 - **AI**: Groq API (llama-3.1-8b) + HuggingFace fallback
 - **Hosting**: Optimized for Vercel free tier
@@ -46,7 +46,7 @@ A modern SaaS platform that helps students study faster using AI. Built with Nex
 ### 1. Prerequisites
 
 - Node.js 18+ and npm
-- MongoDB Atlas account (free tier)
+- Supabase Atlas account (free tier)
 - Google OAuth credentials
 - Groq API key
 - HuggingFace API token
@@ -56,8 +56,8 @@ A modern SaaS platform that helps students study faster using AI. Built with Nex
 Create a `.env.local` file:
 
 ```
-# MongoDB
-MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/studybuddy
+# Supabase
+Supabase_URI=Supabase+srv://user:password@cluster.Supabase.net/studybuddy
 
 # NextAuth (generate with: openssl rand -base64 32)
 NEXTAUTH_SECRET=your-secret-key-here
@@ -116,8 +116,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 3. Generate token in Settings → Access Tokens
 4. Uses `Mistral-7B-Instruct` for fallback
 
-### MongoDB Atlas
-1. Create free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+### Supabase Atlas
+1. Create free account at [Supabase Atlas](https://www.Supabase.com/cloud/atlas)
 2. Create a free cluster
 3. Add IP whitelist: 0.0.0.0/0 (for development)
 4. Get connection string with username/password
@@ -130,7 +130,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Database Schema
 
 ### Users
-- Auto-managed by NextAuth + MongoDB Adapter
+- Auto-managed by NextAuth + Supabase Adapter
 - Fields: name, email, emailVerified, image, provider
 
 ### StudyDocuments
@@ -195,7 +195,7 @@ components/
 └── ui/                    # shadcn/ui components
 
 lib/
-├── db.ts                  # MongoDB connection
+├── db.ts                  # Supabase connection
 ├── models.ts              # Database operations
 ├── ai.ts                  # AI service (Groq + HuggingFace)
 └── utils.ts               # Utilities
@@ -224,7 +224,7 @@ hooks/
 ## Cost Analysis
 
 **Monthly Cost at Scale:**
-- MongoDB Atlas: Free (< 512MB storage)
+- Supabase Atlas: Free (< 512MB storage)
 - Groq API: Free tier (up to 30 requests/min)
 - HuggingFace: Free inference API
 - Gmail SMTP: Free
