@@ -1,8 +1,27 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const PRODUCTION_HOST =
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, "").split("/")[0] ??
+  "studyos-ai.vercel.app";
+
+function isPreviewDeployment(host: string): boolean {
+  return host !== PRODUCTION_HOST && host.endsWith("vercel.app");
+}
+
 export async function updateSession(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
+  const host = request.nextUrl.host;
+
+  // All traffic from preview URLs goes to production so auth and cookies
+  // use one domain only. Stops the login → different URL → login cycle.
+  if (isPreviewDeployment(host)) {
+    const productionUrl = new URL(
+      pathname + request.nextUrl.search,
+      `https://${PRODUCTION_HOST}`
+    );
+    return NextResponse.redirect(productionUrl);
+  }
 
   // If Supabase OAuth redirected to / (or any page) with ?code=..., send to callback
   // so the code is exchanged and user is redirected to dashboard.
