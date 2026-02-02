@@ -28,10 +28,20 @@ export default function LoginPage() {
   async function handleGoogleLogin() {
     setIsLoading(true);
     try {
+      // Always send OAuth callback to production so Supabase never redirects to a preview URL.
+      const productionUrl =
+        process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ??
+        "https://studyos-ai.vercel.app";
+      const callbackUrl =
+        typeof window !== "undefined" &&
+        !window.location.hostname.includes("localhost")
+          ? `${productionUrl}/auth/callback`
+          : `${location.origin}/auth/callback`;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${location.origin}/auth/callback`,
+          redirectTo: callbackUrl,
         },
       });
 

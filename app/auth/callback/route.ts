@@ -1,7 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import { getOrCreateUser } from "@/lib/db";
-import { getAppUrl } from "@/lib/app-url";
+
+// Always redirect to production so auth never sends users to a preview URL.
+const PRODUCTION_URL =
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ??
+  "https://studyos-ai.vercel.app";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -9,15 +13,13 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/dashboard";
 
-  const baseUrl = getAppUrl(request);
-
   if (!code) {
-    return NextResponse.redirect(`${baseUrl}/login?error=no_code`);
+    return NextResponse.redirect(`${PRODUCTION_URL}/login?error=no_code`);
   }
 
   const redirectTo = next.startsWith("/") ? next : `/${next}`;
-  const successRedirect = `${baseUrl}${redirectTo}`;
-  const errorRedirect = `${baseUrl}/login?error=auth`;
+  const successRedirect = `${PRODUCTION_URL}${redirectTo}`;
+  const errorRedirect = `${PRODUCTION_URL}/login?error=auth`;
 
   // Build the response we will return. We MUST set session cookies on THIS
   // response so the browser receives them; cookieStore.set() in route handlers
