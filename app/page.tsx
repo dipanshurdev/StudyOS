@@ -16,9 +16,17 @@ import {
   TrendingUp,
   Shield,
   Globe,
+  LayoutDashboard,
+  LogOut,
 } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
       {/* Navigation - sticky SaaS-style */}
@@ -46,17 +54,36 @@ export default function LandingPage() {
               Pricing
             </Button>
           </Link>
-          <Link href="/login">
-            <Button variant="outline" size="sm">
-              Sign in
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button size="sm" className="gap-2 shadow-sm">
-              Get started free
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </Link>
+          {user ? (
+            <>
+              <Link href="/dashboard">
+                <Button size="sm" className="gap-2 shadow-sm">
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
+                </Button>
+              </Link>
+              <Link href="/auth/signout">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <LogOut className="w-4 h-4" />
+                  Sign out
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="outline" size="sm">
+                  Sign in
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button size="sm" className="gap-2 shadow-sm">
+                  Get started free
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -84,22 +111,35 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Link href="/login">
-              <Button
-                size="lg"
-                className="gap-2 text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto shadow-lg hover:shadow-xl transition-shadow"
-              >
-                Get started free
-                <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
-              </Button>
-            </Link>
+            {user ? (
+              <Link href="/dashboard">
+                <Button
+                  size="lg"
+                  className="gap-2 text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <LayoutDashboard className="w-4 h-4 md:w-5 md:h-5" />
+                  Go to Dashboard
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <Button
+                  size="lg"
+                  className="gap-2 text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  Get started free
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                </Button>
+              </Link>
+            )}
             <a href="#features">
               <Button
                 variant="outline"
                 size="lg"
                 className="text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto"
               >
-                See how it works
+                {user ? "Explore features" : "See how it works"}
               </Button>
             </a>
           </div>
