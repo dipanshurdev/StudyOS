@@ -18,6 +18,7 @@ import {
   Globe,
   LayoutDashboard,
   LogOut,
+  Play,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -133,13 +134,14 @@ export default async function LandingPage() {
                 </Button>
               </Link>
             )}
-            <a href="#features">
+            <a href="#demo">
               <Button
                 variant="outline"
                 size="lg"
-                className="text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto"
+                className="text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto gap-2"
               >
-                {user ? "Explore features" : "See how it works"}
+                <Play className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+                {user ? "Explore features" : "Watch demo"}
               </Button>
             </a>
           </div>
@@ -215,6 +217,42 @@ export default async function LandingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Demo Video */}
+      <section
+        id="demo"
+        className="px-6 py-16 md:py-24 border-t border-border/30 scroll-mt-20"
+      >
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2 tracking-tight">
+              See StudyOS in action
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Watch how to turn your notes into summaries, flashcards, and more
+            </p>
+          </div>
+          <div className="relative w-full rounded-2xl overflow-hidden border border-border/50 shadow-xl bg-muted/30 aspect-video">
+            <iframe
+              src="https://www.youtube.com/embed/r7Fy3arW7fI?rel=0&modestbranding=1"
+              title="StudyOS - Demo video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
+          <p className="text-center text-sm text-muted-foreground mt-4">
+            <a
+              href="https://www.youtube.com/watch?v=r7Fy3arW7fI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              Watch on YouTube
+            </a>
+          </p>
         </div>
       </section>
 
