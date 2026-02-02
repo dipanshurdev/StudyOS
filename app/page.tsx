@@ -19,9 +19,8 @@ import {
   LayoutDashboard,
   LogOut,
   Play,
-  Linkedin,
-  Twitter,
 } from "lucide-react";
+import { BiLogoLinkedin, BiLogoTwitter } from "react-icons/bi";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function LandingPage() {
@@ -773,7 +772,7 @@ export default async function LandingPage() {
                     className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="LinkedIn profile"
                   >
-                    <Linkedin className="w-4 h-4 shrink-0" />
+                    <BiLogoLinkedin size={18} />
                     LinkedIn
                   </a>
                 </li>
@@ -785,7 +784,7 @@ export default async function LandingPage() {
                     className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="Twitter profile"
                   >
-                    <Twitter className="w-4 h-4 shrink-0" />
+                    <BiLogoTwitter size={18} />
                     Twitter
                   </a>
                 </li>
@@ -794,17 +793,17 @@ export default async function LandingPage() {
           </div>
 
           <div className="border-t border-border/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>&copy; 2025 StudyOS. All rights reserved.</p>
+            <p>&copy; 2026 StudyOS. All rights reserved.</p>
             <p className="flex items-center gap-2 flex-wrap justify-center">
               <Shield className="w-4 h-4 shrink-0 text-muted-foreground/70" />
               Secure · Private · Built for students ·{" "}
               <a
-                href="https://twitter.com/dipanshurdev"
+                href="mailto:dipanshurdev@gmail.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
               >
-                @dipanshurdev
+                dipanshurdev@gmail.com
               </a>
             </p>
           </div>
