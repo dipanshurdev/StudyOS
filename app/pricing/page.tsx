@@ -41,18 +41,23 @@ export default function PricingPage() {
 
       {/* Pricing Section */}
       <section className="px-6 py-20 md:py-32 max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-14 md:mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full mb-6">
             <Sparkles className="w-4 h-4 text-primary" />
             <p className="text-sm font-semibold text-primary">
-              Simple, Transparent Pricing
+              Simple, transparent pricing
             </p>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
-            Choose your plan
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 tracking-tight">
+            Choose the plan that fits you
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Start free, upgrade anytime. All plans include our core AI features.
+          <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
+            Start free. No hidden fees. Upgrade or cancel anytime—all plans
+            include our core AI tools.
+          </p>
+          <p className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+            No credit card required for Free
           </p>
         </div>
 
@@ -63,8 +68,8 @@ export default function PricingPage() {
               <Zap className="w-5 h-5 text-muted-foreground" />
               <h3 className="text-2xl font-bold text-foreground">Free</h3>
             </div>
-            <p className="text-muted-foreground mb-6">
-              Perfect for getting started
+            <p className="text-muted-foreground mb-6 text-sm">
+              Try everything. No card required.
             </p>
             <div className="mb-8">
               <span className="text-5xl font-bold text-foreground">$0</span>
@@ -73,7 +78,7 @@ export default function PricingPage() {
 
             <ul className="space-y-4 mb-8">
               {[
-                "5 AI actions per day",
+                "10 AI actions per day",
                 "Unlimited documents",
                 "Basic summaries & explanations",
                 "Practice questions",
@@ -83,7 +88,7 @@ export default function PricingPage() {
                 "Email support",
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <span className="text-sm text-foreground">{item}</span>
                 </li>
               ))}
@@ -105,7 +110,9 @@ export default function PricingPage() {
               <Crown className="w-5 h-5 text-primary" />
               <h3 className="text-2xl font-bold text-foreground">Pro</h3>
             </div>
-            <p className="text-muted-foreground mb-6">For serious students</p>
+            <p className="text-muted-foreground mb-6 text-sm">
+              For students who mean business
+            </p>
             <div className="mb-8">
               <span className="text-5xl font-bold text-foreground">$9</span>
               <span className="text-muted-foreground">/month</span>
@@ -124,7 +131,7 @@ export default function PricingPage() {
                 "Early access to new features",
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <span className="text-sm text-foreground font-medium">
                     {item}
                   </span>
@@ -166,7 +173,7 @@ export default function PricingPage() {
                 "On-premise deployment option",
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <span className="text-sm text-foreground">{item}</span>
                 </li>
               ))}
