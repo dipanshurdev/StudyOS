@@ -19,6 +19,8 @@ import {
   LayoutDashboard,
   LogOut,
   Play,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -757,13 +759,53 @@ export default async function LandingPage() {
                 </li>
               </ul>
             </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Built by</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                @dipanshurdev
+              </p>
+              <ul className="flex flex-wrap gap-3">
+                <li>
+                  <a
+                    href="https://linkedin.com/in/dipanshurdev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="LinkedIn profile"
+                  >
+                    <Linkedin className="w-4 h-4 shrink-0" />
+                    LinkedIn
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://twitter.com/dipanshurdev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Twitter profile"
+                  >
+                    <Twitter className="w-4 h-4 shrink-0" />
+                    Twitter
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div className="border-t border-border/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>&copy; 2025 StudyOS. All rights reserved.</p>
-            <p className="flex items-center gap-2">
+            <p className="flex items-center gap-2 flex-wrap justify-center">
               <Shield className="w-4 h-4 shrink-0 text-muted-foreground/70" />
-              Secure · Private · Built for students
+              Secure · Private · Built for students ·{" "}
+              <a
+                href="https://twitter.com/dipanshurdev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
+                @dipanshurdev
+              </a>
             </p>
           </div>
         </div>
