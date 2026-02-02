@@ -80,9 +80,9 @@ export default function LoginPage() {
           });
           setIsSignUp(false);
         } else if (data.session) {
-          // User confirmed or auto-confirm is on
-          router.push("/dashboard");
-          router.refresh();
+          // User confirmed or auto-confirm is on — full redirect so cookies are sent
+          window.location.href = "/dashboard";
+          return;
         } else {
           // Success, but needs verification
           setCheckEmail(true);
@@ -122,8 +122,9 @@ export default function LoginPage() {
           throw error;
         }
 
-        router.push("/dashboard");
-        router.refresh();
+        // Full redirect so server sees session cookie
+        window.location.href = "/dashboard";
+        return;
       }
     } catch (error: any) {
       toast.error(isSignUp ? "Sign up failed" : "Login failed", {
