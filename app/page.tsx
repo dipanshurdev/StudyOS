@@ -19,9 +19,12 @@ import {
   LayoutDashboard,
   LogOut,
   Play,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
-import { BiLogoLinkedin, BiLogoTwitter } from "react-icons/bi";
 import { createClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 export default async function LandingPage() {
   const supabase = await createClient();
@@ -772,7 +775,7 @@ export default async function LandingPage() {
                     className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="LinkedIn profile"
                   >
-                    <BiLogoLinkedin size={18} />
+                    <Linkedin className="w-4 h-4 shrink-0" />
                     LinkedIn
                   </a>
                 </li>
@@ -784,7 +787,7 @@ export default async function LandingPage() {
                     className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="Twitter profile"
                   >
-                    <BiLogoTwitter size={18} />
+                    <Twitter className="w-4 h-4 shrink-0" />
                     Twitter
                   </a>
                 </li>
