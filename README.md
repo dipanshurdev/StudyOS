@@ -40,7 +40,7 @@ A modern SaaS platform that helps students study faster using AI. Create summari
 
 ---
 
-## Getting Started
+<!-- ## Getting Started
 
 ### Prerequisites
 - Node.js 18+
@@ -144,7 +144,7 @@ lib/
 
 See `DEPLOYMENT.md` for step-by-step Supabase and Vercel setup.
 
----
+--- -->
 
 ## Support
 
