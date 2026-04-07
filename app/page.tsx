@@ -24,8 +24,11 @@ import {
   Linkedin,
   Twitter,
   Quote,
+  Building2,
+  Crown,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { enterpriseMailto, proMailto } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://studyos.app";
@@ -515,122 +518,129 @@ export default async function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Free Plan */}
-            <div className="bg-background border border-border rounded-2xl p-8 hover:border-border/80 transition-colors">
-              <h3 className="text-2xl font-bold text-foreground mb-2">Free</h3>
-              <p className="text-muted-foreground mb-6 text-sm">
-                Try everything. No card required.
-              </p>
-              <div className="mb-8">
-                <span className="text-4xl font-bold text-foreground">$0</span>
-                <span className="text-muted-foreground">/month</span>
-              </div>
-
-              <ul className="space-y-4 mb-8">
-                {[
-                  "10 AI actions per day",
-                  "Unlimited documents",
-                  "Summaries, explanations & questions",
-                  "PDF import",
-                  "Study analytics & streaks",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-3 text-foreground"
-                  >
-                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link href="/login" className="block">
-                <Button variant="outline" className="w-full">
-                  Get started
-                </Button>
-              </Link>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {/* Free Plan */}
+          <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
+            <div className="flex items-center gap-2 mb-4">
+              <Zap className="w-5 h-5 text-muted-foreground" />
+              <h3 className="text-2xl font-bold text-foreground">Free</h3>
+            </div>
+            <p className="text-muted-foreground mb-6 text-sm">
+              Try everything. No card required.
+            </p>
+            <div className="mb-8">
+              <span className="text-5xl font-bold text-foreground">$0</span>
+              <span className="text-muted-foreground">/month</span>
             </div>
 
-            {/* Pro Plan */}
-            <div className="bg-linear-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative">
-              <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
-                Popular
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-2">Pro</h3>
-              <p className="text-muted-foreground mb-6 text-sm">
-                For students who mean business
-              </p>
-              <div className="mb-8">
-                <span className="text-4xl font-bold text-foreground">$9</span>
-                <span className="text-muted-foreground">/month</span>
-              </div>
+            <ul className="space-y-4 mb-8">
+              {[
+                "10 AI actions per day",
+                "Unlimited documents",
+                "Basic summaries & explanations",
+                "Practice questions",
+                "PDF import",
+                "Study analytics",
+                "Study streaks",
+                "Email support",
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground">{item}</span>
+                </li>
+              ))}
+            </ul>
 
-              <ul className="space-y-4 mb-8">
-                {[
-                  "Unlimited AI actions",
-                  "Advanced flashcards",
-                  "Mind maps",
-                  "AI tutor chat",
-                  "Study plans",
-                  "Export to PDF/DOCX",
-                  "Priority support",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-3 text-foreground"
-                  >
-                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-sm font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link href="/login" className="block">
-                <Button className="w-full">Start Pro trial</Button>
-              </Link>
-            </div>
-
-            {/* Enterprise Plan */}
-            <div className="bg-background border border-border rounded-2xl p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-2">
-                Enterprise
-              </h3>
-              <p className="text-muted-foreground mb-6 text-sm">
-                Teams, institutions, and custom needs
-              </p>
-              <div className="mb-8">
-                <span className="text-4xl font-bold text-foreground">
-                  Custom
-                </span>
-              </div>
-
-              <ul className="space-y-4 mb-8">
-                {[
-                  "Everything in Pro",
-                  "Team collaboration",
-                  "Admin dashboard",
-                  "Custom integrations",
-                  "Dedicated support",
-                  "SLA guarantee",
-                ].map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-3 text-foreground"
-                  >
-                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link href="/login" className="block">
-                <Button variant="outline" className="w-full">
-                  Contact sales
-                </Button>
-              </Link>
-            </div>
+            <Link href="/login" className="block">
+              <Button variant="outline" className="w-full">
+                Get started free
+              </Button>
+            </Link>
           </div>
+
+          {/* Pro Plan */}
+          <div className="bg-linear-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative hover:shadow-xl transition-shadow">
+            <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+              Most Popular
+            </div>
+            <div className="flex items-center gap-2 mb-4">
+              <Crown className="w-5 h-5 text-primary" />
+              <h3 className="text-2xl font-bold text-foreground">Pro</h3>
+            </div>
+            <p className="text-muted-foreground mb-6 text-sm">
+              For students who mean business
+            </p>
+            <div className="mb-8">
+              <span className="text-5xl font-bold text-foreground">$9</span>
+              <span className="text-muted-foreground">/month</span>
+            </div>
+
+            <ul className="space-y-4 mb-8">
+              {[
+                "Unlimited AI actions",
+                "Advanced flashcards with spaced repetition",
+                "AI-generated mind maps",
+                "AI tutor chat (unlimited)",
+                "Custom study plans",
+                "Export to PDF, DOCX, Markdown",
+                "Advanced analytics & insights",
+                "Priority support",
+                "Early access to new features",
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground font-medium">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <Button asChild className="w-full">
+              <a href={proMailto}>Contact founder for Pro</a>
+            </Button>
+            <p className="text-xs text-muted-foreground text-center mt-3">
+              Payments are not live yet • Quick manual onboarding available
+            </p>
+          </div>
+
+          {/* Enterprise Plan */}
+          <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
+            <div className="flex items-center gap-2 mb-4">
+              <Building2 className="w-5 h-5 text-muted-foreground" />
+              <h3 className="text-2xl font-bold text-foreground">Enterprise</h3>
+            </div>
+            <p className="text-muted-foreground mb-6">
+              For teams & institutions
+            </p>
+            <div className="mb-8">
+              <span className="text-5xl font-bold text-foreground">Custom</span>
+            </div>
+
+            <ul className="space-y-4 mb-8">
+              {[
+                "Everything in Pro",
+                "Team collaboration & sharing",
+                "Admin dashboard & analytics",
+                "Custom AI model training",
+                "SSO & advanced security",
+                "Dedicated account manager",
+                "SLA guarantee (99.9% uptime)",
+                "Custom integrations",
+                "On-premise deployment option",
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground">{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Button asChild variant="outline" className="w-full">
+              <a href={enterpriseMailto}>Contact founder</a>
+            </Button>
+          </div>
+        </div>
         </div>
       </section>
 
