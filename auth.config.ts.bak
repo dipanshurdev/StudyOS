@@ -36,7 +36,7 @@ export const authConfig: NextAuthConfig = {
             })
 
             if (error || !data.user) {
-              console.error("[v0] Signup error:", error?.message)
+              console.error(" Signup error:", error?.message)
               return null
             }
 
@@ -59,7 +59,7 @@ export const authConfig: NextAuthConfig = {
             })
 
             if (error || !data.user) {
-              console.error("[v0] Sign in error:", error?.message)
+              console.error(" Sign in error:", error?.message)
               return null
             }
 
@@ -70,7 +70,7 @@ export const authConfig: NextAuthConfig = {
             }
           }
         } catch (error) {
-          console.error("[v0] Auth error:", error)
+          console.error(" Auth error:", error)
           return null
         }
       },
