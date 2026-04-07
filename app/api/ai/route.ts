@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(`[v0] Processing ${action}, content length: ${content.length}`);
+    console.log(`Processing ${action}, content length: ${content.length}`);
 
     const conversationHistory = body.conversationHistory || undefined;
     const result = await generateAIResponse(
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       success: true,
     });
   } catch (error) {
-    console.error("[v0] AI API error:", error);
+    console.error("AI API error:", error);
 
     const errorMessage =
       error instanceof Error ? error.message : "An unknown error occurred";

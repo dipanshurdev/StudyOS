@@ -2,8 +2,11 @@
 
 async function getAIKeys() {
   return {
-    GROQ_API_KEY: process.env.GROQ_API_KEY,
-    HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY,
+    GROQ_API_KEY:
+      process.env.GROQ_API_KEY || process.env.NEXT_PUBLIC_GROQ_API_KEY,
+    HUGGINGFACE_API_KEY:
+      process.env.HUGGINGFACE_API_KEY ||
+      process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY,
   };
 }
 
