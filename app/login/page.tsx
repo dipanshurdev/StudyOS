@@ -182,7 +182,7 @@ export default function LoginPage() {
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-primary" />
         <div className="relative z-20 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md p-1.5 border border-white/30">
+          <div className="w-10 h-10 rounded-md bg-white/20 backdrop-blur-md p-1.5 border border-white/30">
             <img
               src="/logo.png"
               alt="StudyOS Logo"

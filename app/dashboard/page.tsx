@@ -114,11 +114,15 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/10">
+    <div className="relative min-h-screen bg-linear-to-br from-background via-background to-muted/10">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-primary/10 blur-3xl dark:bg-primary/15" />
+        <div className="absolute left-1/3 bottom-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-500/15" />
+      </div>
       <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div className="mb-8 rounded-2xl border border-border/40 bg-card/50 backdrop-blur-sm p-6 md:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-1 tracking-tight">
                 Hey, {userDetails.display_name?.split(" ")[0] || "there"} 👋
@@ -135,7 +139,7 @@ export default async function DashboardPage() {
             <Link href="/dashboard/new" className="shrink-0">
               <Button
                 size="lg"
-                className="gap-2 shadow-md hover:shadow-lg transition-shadow w-full sm:w-auto"
+                  className="gap-2 shadow-md hover:shadow-lg transition-shadow w-full sm:w-auto"
               >
                 <Plus className="w-5 h-5" />
                 New document
@@ -146,11 +150,11 @@ export default async function DashboardPage() {
 
         {/* Usage Progress Bar */}
         {userDetails.plan_type === "free" && (
-          <Card className="mb-8 border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+          <Card className="mb-8 border-primary/20 bg-linear-to-r from-primary/5 to-primary/10">
             <CardContent className="p-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-sm bg-primary/20 flex items-center justify-center shrink-0">
                     <Zap className="w-5 h-5 text-primary" />
                   </div>
                   <div>
@@ -171,7 +175,7 @@ export default async function DashboardPage() {
               </div>
               <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-500"
+                  className="h-full bg-linear-to-r from-primary to-primary/80 rounded-full transition-all duration-500"
                   style={{ width: `${usagePercentage}%` }}
                 />
               </div>
@@ -190,13 +194,13 @@ export default async function DashboardPage() {
               >
                 <div
                   className={`absolute top-0 left-0 w-1 h-full ${stat.bg
-                    .replace("bg", "bg-gradient-to-b")
+                    .replace("bg", "bg-linear-to-b")
                     .replace("/10", "/20")} transition-all group-hover:w-1.5`}
                 ></div>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div
-                      className={`p-3 rounded-xl ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}
+                      className={`p-3 rounded-md ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}
                     >
                       <Icon className="w-5 h-5" />
                     </div>
@@ -253,12 +257,10 @@ export default async function DashboardPage() {
               const Icon = action.icon;
               return (
                 <Link key={idx} href={action.href}>
-                  <Card
-                    className={`bg-gradient-to-br ${action.color} border-border/50 hover:border-primary/30 transition-all cursor-pointer group h-full`}
-                  >
+                  <Card className={`bg-linear-to-br ${action.color} border-border/50 hover:border-primary/30 hover:shadow-md transition-all cursor-pointer group h-full`}>
                     <CardContent className="p-6">
                       <div
-                        className={`w-12 h-12 rounded-xl bg-background/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                        className={`w-12 h-12 rounded-md bg-background/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
                       >
                         <Icon className={`w-6 h-6 ${action.iconColor}`} />
                       </div>
@@ -321,12 +323,12 @@ export default async function DashboardPage() {
                   className="group block"
                 >
                   <Card className="bg-card/50 hover:bg-card border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md group-hover:-translate-y-0.5 overflow-hidden relative">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary/60 to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-primary/60 to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between gap-6">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                            <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center shrink-0">
                               <FileText className="w-5 h-5 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -356,7 +358,7 @@ export default async function DashboardPage() {
                                 : "N/A"}
                             </p>
                           </div>
-                          <div className="w-10 h-10 rounded-lg bg-background border border-border/50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:shadow-lg">
+                          <div className="w-10 h-10 rounded-sm bg-background border border-border/50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:shadow-lg">
                             <ArrowRight className="w-5 h-5" />
                           </div>
                         </div>

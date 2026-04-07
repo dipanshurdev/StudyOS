@@ -18,7 +18,10 @@ export default async function SettingsPage() {
   const name = user.user_metadata.full_name || user.email?.split('@')[0] || "User"
 
   return (
-    <div className="flex-1 overflow-auto bg-background">
+    <div className="relative flex-1 overflow-auto bg-background">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute right-0 top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl dark:bg-primary/20" />
+      </div>
       <div className="max-w-2xl mx-auto px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
@@ -27,7 +30,7 @@ export default async function SettingsPage() {
 
         <div className="space-y-6">
           {/* Account Settings */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-xl">
+          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
             <CardHeader>
               <CardTitle className="text-lg">Account Information</CardTitle>
               <CardDescription>Your account details and profile information</CardDescription>
@@ -60,7 +63,7 @@ export default async function SettingsPage() {
           <Separator className="bg-border/30" />
 
           {/* Usage Settings */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-xl">
+          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Bell className="w-5 h-5" />
@@ -69,7 +72,7 @@ export default async function SettingsPage() {
               <CardDescription>Control how your usage is tracked and displayed</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+              <div className="p-4 bg-primary/5 border border-primary/20 rounded-sm">
                 <h4 className="font-medium text-foreground mb-2">Your Daily Limit</h4>
                 <p className="text-sm text-muted-foreground mb-4">
                   You get 5 free AI actions per day. This resets daily at midnight UTC.
@@ -84,7 +87,7 @@ export default async function SettingsPage() {
           <Separator className="bg-border/30" />
 
           {/* Privacy Settings */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-xl">
+          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Shield className="w-5 h-5" />
@@ -94,7 +97,7 @@ export default async function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-sm">
                   <div>
                     <p className="text-sm font-medium text-foreground">Data Encryption</p>
                     <p className="text-xs text-muted-foreground">Your documents are encrypted in transit</p>
@@ -102,7 +105,7 @@ export default async function SettingsPage() {
                   <span className="text-xs font-semibold text-green-600 dark:text-green-400">Enabled</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-sm">
                   <div>
                     <p className="text-sm font-medium text-foreground">Two-Factor Auth</p>
                     <p className="text-xs text-muted-foreground">Add extra security to your account</p>
@@ -118,7 +121,7 @@ export default async function SettingsPage() {
           <Separator className="bg-border/30" />
 
           {/* Data Export */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-xl">
+          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Download className="w-5 h-5" />
@@ -137,7 +140,7 @@ export default async function SettingsPage() {
           <Separator className="bg-border/30" />
 
           {/* Danger Zone */}
-          <Card className="border-destructive/50 bg-destructive/5 rounded-xl">
+          <Card className="border-destructive/50 bg-destructive/5 rounded-md">
             <CardHeader>
               <CardTitle className="text-lg text-destructive">Danger Zone</CardTitle>
               <CardDescription>Irreversible actions</CardDescription>

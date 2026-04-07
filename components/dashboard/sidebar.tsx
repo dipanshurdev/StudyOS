@@ -50,7 +50,7 @@ export function Sidebar({ user }: { user?: { name?: string; email?: string } }) 
     <div className="w-72 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
       <div className="p-6 border-b border-sidebar-border">
         <Link href="/" className="flex items-center gap-3 mb-8 group">
-          <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-background shadow-md border border-border/50 p-1.5 transition-all group-hover:shadow-lg group-hover:border-primary/20">
+          <div className="w-10 h-10 flex items-center justify-center rounded-md bg-background shadow-md border border-border/50 p-1.5 transition-all group-hover:shadow-lg group-hover:border-primary/20">
             <img src="/logo.png" alt="StudyOS" className="w-full h-full object-contain" />
           </div>
           <div>
@@ -60,7 +60,7 @@ export function Sidebar({ user }: { user?: { name?: string; email?: string } }) 
         </Link>
 
         <CreateDocumentDialog open={openDialog} onOpenChange={setOpenDialog} onDocumentCreated={handleDocumentCreated}>
-          <Button size="lg" className="w-full gap-2 rounded-lg shadow-md hover:shadow-lg transition-all">
+          <Button size="lg" className="w-full gap-2 rounded-sm shadow-md hover:shadow-lg transition-all">
             <Plus className="w-5 h-5" />
             <span>New document</span>
           </Button>
@@ -80,7 +80,7 @@ export function Sidebar({ user }: { user?: { name?: string; email?: string } }) 
           ) : (
             documents.map((doc) => (
               <Link key={doc.id} href={`/dashboard/${doc.id}`}>
-                <div className="p-3 rounded-lg hover:bg-sidebar-accent transition-all duration-200 cursor-pointer group">
+                <div className="p-3 rounded-sm hover:bg-sidebar-accent transition-all duration-200 cursor-pointer group">
                   <p className="text-sm font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">
                     {doc.title}
                   </p>
@@ -100,7 +100,7 @@ export function Sidebar({ user }: { user?: { name?: string; email?: string } }) 
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50 rounded-lg font-medium"
+            className="w-full justify-start text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50 rounded-sm font-medium"
           >
             <BarChart3 className="w-4 h-4 mr-2" />
             Analytics
@@ -109,7 +109,7 @@ export function Sidebar({ user }: { user?: { name?: string; email?: string } }) 
       </div>
 
       <div className="p-4 space-y-2">
-        <div className="px-2 py-3 mb-2 bg-sidebar-accent/30 rounded-lg">
+        <div className="px-2 py-3 mb-2 bg-sidebar-accent/30 rounded-sm">
           <p className="text-xs font-medium text-sidebar-foreground truncate">{user?.email || "User"}</p>
           <p className="text-xs text-sidebar-muted-foreground">{user?.name || "Demo"}</p>
         </div>
@@ -118,7 +118,7 @@ export function Sidebar({ user }: { user?: { name?: string; email?: string } }) 
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50 rounded-lg"
+            className="w-full justify-start text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent/50 rounded-sm"
           >
             <Settings className="w-4 h-4 mr-2" />
             Settings

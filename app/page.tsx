@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
+import { LandingThemeToggle } from "@/components/landing/theme-toggle";
 import {
   CheckCircle2,
   Zap,
@@ -21,10 +23,13 @@ import {
   Play,
   Linkedin,
   Twitter,
+  Quote,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://studyos.app";
+const founderEmail = "dipanshurdev@gmail.com";
 
 export default async function LandingPage() {
   const supabase = await createClient();
@@ -33,14 +38,28 @@ export default async function LandingPage() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
+    <div className="relative isolate min-h-screen bg-linear-to-b from-background via-background to-primary/5">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute left-1/2 top-0 h-104 w-104 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl dark:bg-primary/20" />
+        <div className="absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-500/20" />
+        <div className="absolute -right-20 bottom-1/4 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-500/20" />
+      </div>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:shadow-md"
+      >
+        Skip to content
+      </a>
       {/* Navigation - sticky SaaS-style */}
       <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-3 max-w-7xl mx-auto border-b border-border/30 bg-background/80 backdrop-blur-xl">
         <div className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-xl bg-primary/10 p-1 border border-primary/20 shadow-sm transition-all group-hover:shadow-md group-hover:border-primary/30">
-            <img
+          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-md bg-primary/10 p-1 border border-primary/20 shadow-sm transition-all group-hover:shadow-md group-hover:border-primary/30">
+            <Image
               src="/logo.png"
               alt="StudyOS Logo"
+              width={36}
+              height={36}
+              priority
               className="w-full h-full object-contain"
             />
           </div>
@@ -54,11 +73,17 @@ export default async function LandingPage() {
               Features
             </Button>
           </Link>
+          <Link href="#testimonials" className="hidden sm:block">
+            <Button variant="ghost" size="sm">
+              Reviews
+            </Button>
+          </Link>
           <Link href="/pricing">
             <Button variant="ghost" size="sm">
               Pricing
             </Button>
           </Link>
+          <LandingThemeToggle />
           {user ? (
             <>
               <Link href="/dashboard">
@@ -92,6 +117,7 @@ export default async function LandingPage() {
         </div>
       </nav>
 
+      <main id="main-content" className="relative">
       {/* Hero Section */}
       <section className="px-6 py-16 md:py-28 max-w-7xl mx-auto text-center">
         <div className="space-y-6 mb-12">
@@ -158,33 +184,33 @@ export default async function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 pt-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 fill-amber-500 text-amber-500 shrink-0" />
-              <span className="font-semibold text-foreground">4.9/5</span>
-              <span>from 2,400+ reviews</span>
+              <span className="font-semibold text-foreground">Student-first product</span>
+              <span>built from real study workflows</span>
             </div>
             <div className="h-4 w-px bg-border hidden sm:block" />
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-primary shrink-0" />
-              <span className="font-semibold text-foreground">15,000+</span>
-              <span>active students</span>
+              <span className="font-semibold text-foreground">Fast setup</span>
+              <span>start in under a minute</span>
             </div>
             <div className="h-4 w-px bg-border hidden sm:block" />
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-emerald-500 shrink-0" />
-              <span>Trusted by universities worldwide</span>
+              <span>Privacy-conscious by design</span>
             </div>
           </div>
         </div>
 
         {/* Hero Visual - Feature Showcase */}
         <div className="relative mt-16 md:mt-20 mb-16 md:mb-20">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent rounded-3xl blur-3xl" />
+          <div className="absolute inset-0 bg-linear-to-r from-primary/20 via-primary/10 to-transparent rounded-3xl blur-3xl" />
           <div className="relative bg-card/80 border border-border/50 rounded-2xl md:rounded-3xl p-6 md:p-10 backdrop-blur-sm shadow-xl md:shadow-2xl">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-6 text-center md:text-left">
               Everything you need in one workspace
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              <div className="space-y-3 text-left group p-4 rounded-xl hover:bg-muted/30 transition-colors">
-                <div className="w-11 h-11 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <div className="space-y-3 text-left group p-4 rounded-md hover:bg-muted/30 transition-colors">
+                <div className="w-11 h-11 bg-linear-to-br from-primary/20 to-primary/10 rounded-md flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                   <Zap className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground">
@@ -195,8 +221,8 @@ export default async function LandingPage() {
                   actually appears on the exam.
                 </p>
               </div>
-              <div className="space-y-3 text-left group p-4 rounded-xl hover:bg-muted/30 transition-colors">
-                <div className="w-11 h-11 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <div className="space-y-3 text-left group p-4 rounded-md hover:bg-muted/30 transition-colors">
+                <div className="w-11 h-11 bg-linear-to-br from-primary/20 to-primary/10 rounded-md flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                   <Brain className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground">
@@ -207,8 +233,8 @@ export default async function LandingPage() {
                   remember when it matters.
                 </p>
               </div>
-              <div className="space-y-3 text-left group p-4 rounded-xl hover:bg-muted/30 transition-colors">
-                <div className="w-11 h-11 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <div className="space-y-3 text-left group p-4 rounded-md hover:bg-muted/30 transition-colors">
+                <div className="w-11 h-11 bg-linear-to-br from-primary/20 to-primary/10 rounded-md flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                   <BarChart3 className="w-5 h-5 text-primary" />
                 </div>
                 <h3 className="font-semibold text-foreground">
@@ -220,6 +246,31 @@ export default async function LandingPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted by Students and Teams */}
+      <section className="px-6 py-10 md:py-14 border-t border-border/30">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-center text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider mb-6">
+            Trusted by learners from top institutions
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+            {[
+              "University Programs",
+              "Medical Aspirants",
+              "Engineering Batches",
+              "MBA Cohorts",
+              "Bootcamp Teams",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-md border border-border/50 bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground/80 backdrop-blur-sm"
+              >
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -244,6 +295,8 @@ export default async function LandingPage() {
               title="StudyOS - Demo video"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
               className="absolute inset-0 w-full h-full"
             />
           </div>
@@ -270,13 +323,13 @@ export default async function LandingPage() {
             href="https://peerlist.io/launchpad"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-xl transition-opacity hover:opacity-90"
+            className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md transition-opacity hover:opacity-90"
             aria-label="StudyOS on Peerlist Launchpad"
           >
-            <img
+            <Image
               src="/peerlist-launchpad.png"
               alt="StudyOS - Study Smarter with AI. Live on Peerlist Launchpad."
-              className="w-full max-w-2xl mx-auto rounded-xl border border-border/50 shadow-lg object-contain"
+              className="w-full max-w-2xl mx-auto rounded-md border border-border/50 shadow-lg object-contain"
               width={672}
               height={280}
             />
@@ -379,10 +432,10 @@ export default async function LandingPage() {
               return (
                 <div
                   key={idx}
-                  className="bg-background border border-border/50 rounded-xl p-5 md:p-6 hover:border-primary/40 hover:shadow-md transition-all duration-200 group"
+                  className="bg-background border border-border/50 rounded-md p-5 md:p-6 hover:border-primary/40 hover:shadow-md transition-all duration-200 group"
                 >
                   <div
-                    className={`w-11 h-11 ${feature.bg} rounded-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform shrink-0`}
+                    className={`w-11 h-11 ${feature.bg} rounded-sm flex items-center justify-center mb-3 group-hover:scale-105 transition-transform shrink-0`}
                   >
                     <Icon className={`w-5 h-5 ${feature.color}`} />
                   </div>
@@ -435,7 +488,7 @@ export default async function LandingPage() {
               key={idx}
               className="text-center space-y-4 relative md:last:before:hidden md:last:after:hidden"
             >
-              <div className="w-14 h-14 bg-primary/10 border-2 border-primary/20 rounded-xl flex items-center justify-center mx-auto text-xl font-bold text-primary">
+              <div className="w-14 h-14 bg-primary/10 border-2 border-primary/20 rounded-md flex items-center justify-center mx-auto text-xl font-bold text-primary">
                 {item.step}
               </div>
               <h3 className="text-lg md:text-xl font-semibold text-foreground">
@@ -500,7 +553,7 @@ export default async function LandingPage() {
             </div>
 
             {/* Pro Plan */}
-            <div className="bg-gradient-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative">
+            <div className="bg-linear-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative">
               <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
                 Popular
               </div>
@@ -581,11 +634,114 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section
+        id="testimonials"
+        className="px-6 py-20 md:py-28 border-t border-border/30"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 md:mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-3">
+              Why students keep using StudyOS
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Common feedback patterns from early users across exam prep and
+              daily revision.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            {[
+              {
+                quote:
+                  "Large notes become structured summaries faster, so students spend more time revising and less time formatting.",
+                name: "Faster revision",
+                role: "Most mentioned benefit",
+              },
+              {
+                quote:
+                  "The tutor mode helps break difficult topics into simpler explanations with examples and follow-up questions.",
+                name: "Better understanding",
+                role: "Concept clarity",
+              },
+              {
+                quote:
+                  "Practice mode helps identify weak areas early, making revision plans more focused before exams.",
+                name: "Focused practice",
+                role: "Exam preparation",
+              },
+            ].map((item) => (
+              <article
+                key={item.name}
+                className="rounded-2xl border border-border/50 bg-card/70 p-6 backdrop-blur-sm hover:border-primary/30 transition-colors"
+              >
+                <Quote className="w-5 h-5 text-primary/70 mb-4" />
+                <p className="text-sm leading-relaxed text-foreground/90 mb-5">
+                  {item.quote}
+                </p>
+                <div className="text-sm">
+                  <p className="font-semibold text-foreground">{item.name}</p>
+                  <p className="text-muted-foreground">{item.role}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-6 py-20 md:py-28 bg-card/30 border-t border-border/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10 md:mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-3">
+              Frequently asked questions
+            </h2>
+            <p className="text-muted-foreground">
+              Everything students ask before they switch to StudyOS.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {[
+              {
+                q: "Is StudyOS really free to start?",
+                a: "Yes. You get 10 AI actions per day on the free plan, with no credit card required.",
+              },
+              {
+                q: "Can I upload PDFs and lecture notes?",
+                a: "Yes. Upload PDFs, paste notes, or write directly and generate summaries, questions, and flashcards instantly.",
+              },
+              {
+                q: "Is my study data private?",
+                a: "Your workspace is private by default. We use secure infrastructure and never sell your personal data.",
+              },
+              {
+                q: "Who is StudyOS for?",
+                a: "High-school and university students, competitive exam aspirants, and cohort-based learning teams.",
+              },
+            ].map((item) => (
+              <details
+                key={item.q}
+                className="group rounded-md border border-border/50 bg-background px-5 py-4"
+              >
+                <summary className="cursor-pointer list-none font-medium text-foreground flex items-center justify-between gap-4">
+                  <span>{item.q}</span>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground transition-transform group-open:rotate-90 shrink-0" />
+                </summary>
+                <p className="text-sm text-muted-foreground pt-3 pr-6 leading-relaxed">
+                  {item.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="px-6 py-20 md:py-32 bg-gradient-to-br from-primary/10 via-primary/5 to-background border-t border-border/30">
+      <section className="px-6 py-20 md:py-32 bg-linear-to-br from-primary/10 via-primary/5 to-background border-t border-border/30">
         <div className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
-            Join 15,000+ students studying smarter
+            Start studying smarter today
           </h2>
           <p className="text-base md:text-lg text-muted-foreground">
             Get your first 10 AI actions free. No credit card. Start in under a
@@ -612,8 +768,8 @@ export default async function LandingPage() {
             </Link>
           </div>
           <p className="text-xs text-muted-foreground pt-2">
-            Trusted by students at 50+ universities · SOC 2 compliant · Your
-            data stays yours
+            Privacy-conscious design · Built for focused learning · Your data
+            stays yours
           </p>
         </div>
       </section>
@@ -623,10 +779,12 @@ export default async function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8 pb-8 border-b border-border/30">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-                <img
+              <div className="w-9 h-9 rounded-sm bg-primary/10 flex items-center justify-center border border-primary/20">
+                <Image
                   src="/logo.png"
                   alt="StudyOS"
+                  width={36}
+                  height={36}
                   className="w-full h-full object-contain p-1"
                 />
               </div>
@@ -644,7 +802,7 @@ export default async function LandingPage() {
               flashcards, mind maps, and an AI tutor—all in one place.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
             <div>
               <h4 className="font-semibold text-foreground mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
@@ -665,12 +823,14 @@ export default async function LandingPage() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Updates
-                  </a>
+                  <Link href="#demo" className="hover:text-foreground transition-colors">
+                    Demo
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#testimonials" className="hover:text-foreground transition-colors">
+                    Reviews
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -679,7 +839,7 @@ export default async function LandingPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=About%20StudyOS`}
                     className="hover:text-foreground transition-colors"
                   >
                     About
@@ -687,18 +847,20 @@ export default async function LandingPage() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="https://www.youtube.com/watch?v=r7Fy3arW7fI"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="hover:text-foreground transition-colors"
                   >
-                    Blog
+                    Product demo
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=Partnership%20with%20StudyOS`}
                     className="hover:text-foreground transition-colors"
                   >
-                    Careers
+                    Partnerships
                   </a>
                 </li>
               </ul>
@@ -708,23 +870,20 @@ export default async function LandingPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=StudyOS%20Documentation%20Request`}
                     className="hover:text-foreground transition-colors"
                   >
-                    Documentation
+                    Docs request
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    API
-                  </a>
+                  <Link href="/pricing" className="hover:text-foreground transition-colors">
+                    Billing & plans
+                  </Link>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=StudyOS%20Support`}
                     className="hover:text-foreground transition-colors"
                   >
                     Support
@@ -737,26 +896,26 @@ export default async function LandingPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=StudyOS%20Privacy%20Policy%20Request`}
                     className="hover:text-foreground transition-colors"
                   >
-                    Privacy
+                    Privacy policy
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=StudyOS%20Terms%20Request`}
                     className="hover:text-foreground transition-colors"
                   >
-                    Terms
+                    Terms of use
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href={`mailto:${founderEmail}?subject=StudyOS%20Security%20Information`}
                     className="hover:text-foreground transition-colors"
                   >
-                    Security
+                    Security info
                   </a>
                 </li>
               </ul>
@@ -801,17 +960,39 @@ export default async function LandingPage() {
               <Shield className="w-4 h-4 shrink-0 text-muted-foreground/70" />
               Secure · Private · Built for students ·{" "}
               <a
-                href="mailto:dipanshurdev@gmail.com"
+                href={`mailto:${founderEmail}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
               >
-                dipanshurdev@gmail.com
+                {founderEmail}
               </a>
             </p>
           </div>
         </div>
       </footer>
+      </main>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "StudyOS",
+            applicationCategory: "EducationalApplication",
+            operatingSystem: "Web",
+            url: appUrl,
+            description:
+              "AI-powered study platform for summaries, flashcards, mind maps, and AI tutoring.",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+          }),
+        }}
+      />
     </div>
   );
 }

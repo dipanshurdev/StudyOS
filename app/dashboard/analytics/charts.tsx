@@ -59,7 +59,7 @@ export function WeeklyActivityChart({ data }: { data: any[] }) {
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className="bg-card/90 backdrop-blur-md border border-border/50 p-3 rounded-xl shadow-xl">
+                  <div className="bg-card/90 backdrop-blur-md border border-border/50 p-3 rounded-md shadow-xl">
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">{payload[0].payload.day}</p>
                     <p className="text-lg font-extrabold text-foreground">{payload[0].value} <span className="text-xs font-normal text-muted-foreground">actions</span></p>
                   </div>
@@ -140,7 +140,7 @@ export function ActionBreakdownChart({ data }: { data: any[] }) {
              content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-card/90 backdrop-blur-md border border-border/50 p-3 rounded-xl shadow-xl flex items-center gap-3">
+                    <div className="bg-card/90 backdrop-blur-md border border-border/50 p-3 rounded-md shadow-xl flex items-center gap-3">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: payload[0].payload.fill }}></div>
                       <div>
                          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{payload[0].name}</p>

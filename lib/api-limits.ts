@@ -49,7 +49,7 @@ export async function checkRateLimit(
     .single();
 
   if (error || !user) {
-    console.error("[v0] Error checking rate limit:", error);
+    console.error(" Error checking rate limit:", error);
     return { allowed: false, remaining: 0 };
   }
 
@@ -91,7 +91,7 @@ export async function recordAIUsage(
   });
 
   if (logError) {
-    console.error("[v0] Error logging AI request:", logError);
+    console.error(" Error logging AI request:", logError);
   }
 
   // Update usage count and study streak
@@ -142,7 +142,7 @@ export async function recordAIUsage(
     .eq("id", userId);
 
   if (updateError) {
-    console.error("[v0] Error incrementing AI credits:", updateError);
+    console.error(" Error incrementing AI credits:", updateError);
   }
 }
 
@@ -154,7 +154,7 @@ export async function getUserPlan(userId: string) {
     .single();
 
   if (error) {
-    console.error("[v0] Error getting user plan:", error);
+    console.error(" Error getting user plan:", error);
     return {
       plan_type: "free",
       ai_credits_used_today: 0,

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
+// Signout and redirect function
 async function signOutAndRedirect() {
   const supabase = await createClient();
   await supabase.auth.signOut();

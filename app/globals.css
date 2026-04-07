@@ -126,7 +126,7 @@ body {
     @apply bg-primary/10 backdrop-blur-md border border-primary/20;
   }
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-primary via-primary/80 to-accent;
+    @apply bg-clip-text text-transparent bg-linear-to-br from-primary via-primary/80 to-accent;
   }
   
   /* Markdown Styling for AI Results */
@@ -152,7 +152,7 @@ body {
     @apply bg-muted px-1.5 py-0.5 rounded font-mono text-sm border border-border;
   }
   .prose-ai pre {
-    @apply bg-secondary/50 p-4 rounded-lg font-mono text-sm my-4 overflow-x-auto border border-border;
+    @apply bg-secondary/50 p-4 rounded-sm font-mono text-sm my-4 overflow-x-auto border border-border;
   }
   .prose-ai blockquote {
     @apply border-l-4 border-primary/50 pl-4 italic text-muted-foreground my-4;

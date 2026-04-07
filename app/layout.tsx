@@ -1,16 +1,46 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
-
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://studyos.app"
 
 export const metadata: Metadata = {
+  metadataBase: new URL(appUrl),
   title: "StudyOS - Study Smarter with AI",
   description: "AI-powered study platform to help students study faster and smarter",
+  applicationName: "StudyOS",
+  keywords: [
+    "AI study app",
+    "flashcards",
+    "study planner",
+    "exam prep",
+    "AI tutor",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: appUrl,
+    title: "StudyOS - Study Smarter with AI",
+    description: "Turn notes into summaries, flashcards, mind maps, and exam-ready practice.",
+    siteName: "StudyOS",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "StudyOS",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "StudyOS - Study Smarter with AI",
+    description: "AI-powered platform for summaries, flashcards, and exam prep.",
+    images: ["/logo.png"],
+  },
   icons: {
     icon: [
       {
@@ -39,7 +69,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -24,7 +24,7 @@ export async function GET() {
       documents: documents || [],
     })
   } catch (error) {
-    console.error("[v0] Documents API error:", error)
+    console.error(" Documents API error:", error)
     return NextResponse.json({ error: "Failed to fetch documents" }, { status: 500 })
   }
 }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newDocument, { status: 201 })
   } catch (error) {
-    console.error("[v0] Create document error:", error)
+    console.error(" Create document error:", error)
     return NextResponse.json({ error: "Failed to create document" }, { status: 500 })
   }
 }

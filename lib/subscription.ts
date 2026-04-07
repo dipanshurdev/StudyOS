@@ -47,7 +47,7 @@ export async function upgradePlan(userId: string, newPlan: PlanType) {
     .eq("id", userId)
 
   if (error) {
-    console.error("[v0] Error upgrading plan:", error)
+    console.error(" Error upgrading plan:", error)
     throw error
   }
 }
@@ -64,7 +64,7 @@ export async function getUserSubscription(userId: string) {
     .single()
 
   if (error) {
-    console.error("[v0] Error fetching subscription:", error)
+    console.error(" Error fetching subscription:", error)
     return {
       plan: "free",
       monthlyCredits: PLANS.free.monthlyCredits,

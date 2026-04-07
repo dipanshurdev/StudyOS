@@ -104,11 +104,17 @@ export default async function AnalyticsPage() {
     studyStreak: userData?.study_streak || 0,
     longestStreak: userData?.longest_streak || 0,
   };
+  const dailyLimit = userData?.plan_type === "pro" ? 100 : 10;
+  const usagePercent = Math.min(100, Math.round((stats.actionsToday / dailyLimit) * 100));
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl dark:bg-primary/20" />
+        <div className="absolute -right-24 bottom-20 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/20" />
+      </div>
       {/* Analytics Header */}
-      <div className="border-b border-border/40 bg-card/60 backdrop-blur-xl sticky top-0 z-50">
+      <div className="border-b border-border/40 bg-card/70 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/dashboard">
@@ -128,7 +134,7 @@ export default async function AnalyticsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-lg h-8 text-[10px] uppercase font-bold tracking-widest bg-background/50"
+              className="rounded-sm h-8 text-[10px] uppercase font-bold tracking-widest bg-background/50"
             >
               Export Report
             </Button>
@@ -143,7 +149,7 @@ export default async function AnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
           <div className="lg:col-span-3">
             <div className="mb-10">
-              <h2 className="text-4xl font-black text-foreground tracking-tighter mb-4">
+                    <h2 className="text-3xl md:text-4xl font-black text-foreground tracking-tighter mb-4">
                 Everything you've{" "}
                 <span className="text-primary italic">learned.</span>
               </h2>
@@ -195,7 +201,7 @@ export default async function AnalyticsPage() {
                   <CardContent className="p-6">
                     <div className="flex items-center gap-4">
                       <div
-                        className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}
+                        className={`p-3 rounded-md ${stat.bg} ${stat.color}`}
                       >
                         <stat.icon className="w-5 h-5" />
                       </div>
@@ -220,7 +226,7 @@ export default async function AnalyticsPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <Card className="h-full border-primary/20 bg-primary/5 backdrop-blur-sm relative overflow-hidden group">
+            <Card className="h-full border-primary/20 bg-linear-to-br from-primary/10 to-card backdrop-blur-sm relative overflow-hidden group shadow-sm">
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
               <CardContent className="p-8 flex flex-col items-center text-center justify-center h-full">
                 <div className="w-16 h-16 rounded-2xl bg-primary shadow-lg shadow-primary/30 flex items-center justify-center mb-6 text-primary-foreground transform group-hover:rotate-6 transition-transform">
@@ -247,7 +253,7 @@ export default async function AnalyticsPage() {
                       fill="transparent"
                       strokeDasharray={364.4}
                       strokeDashoffset={
-                        364.4 - 364.4 * (stats.actionsToday / 5)
+                        364.4 - 364.4 * (Math.min(stats.actionsToday, dailyLimit) / dailyLimit)
                       }
                       strokeLinecap="round"
                       className="text-primary transition-all duration-1000 ease-out"
@@ -264,12 +270,7 @@ export default async function AnalyticsPage() {
                 </div>
                 <p className="text-xs text-muted-foreground px-4">
                   You've used{" "}
-                  {Math.round(
-                    (stats.actionsToday /
-                      (userData?.plan_type === "pro" ? 100 : 10)) *
-                      100,
-                  )}
-                  % of your {userData?.plan_type === "pro" ? "Pro" : "free"} AI
+                  {usagePercent}% of your {userData?.plan_type === "pro" ? "Pro" : "free"} AI
                   actions for today.
                 </p>
               </CardContent>
@@ -290,7 +291,7 @@ export default async function AnalyticsPage() {
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-sm bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-wider">
                     <div className="w-2 h-2 rounded-full bg-primary ring-2 ring-primary/20 animate-pulse"></div>
                     Last 7 Days
                   </div>
@@ -327,7 +328,7 @@ export default async function AnalyticsPage() {
         </div>
 
         {/* Learning Tips Section */}
-        <div className="mt-12 p-1 bg-gradient-to-tr from-primary/20 via-border/20 to-accent/20 rounded-[2.5rem]">
+        <div className="mt-12 p-1 bg-linear-to-tr from-primary/20 via-border/20 to-accent/20 rounded-[2.5rem]">
           <div className="bg-card rounded-[2.4rem] p-10 md:p-12 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-12 opacity-[0.03] group-hover:scale-110 transition-transform duration-1000">
               <Brain className="w-64 h-64" />

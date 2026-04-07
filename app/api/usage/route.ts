@@ -51,7 +51,7 @@ export async function GET() {
           : "Daily limit reached. Upgrade to Pro for 100 actions/day!",
     });
   } catch (error) {
-    console.error("[v0] Usage API error:", error);
+    console.error(" Usage API error:", error);
     return NextResponse.json(
       { error: "Failed to fetch usage" },
       { status: 500 },

@@ -2,11 +2,8 @@
 
 async function getAIKeys() {
   return {
-    GROQ_API_KEY:
-      process.env.GROQ_API_KEY || process.env.NEXT_PUBLIC_GROQ_API_KEY,
-    HUGGINGFACE_API_KEY:
-      process.env.HUGGINGFACE_API_KEY ||
-      process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+    HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY,
   };
 }
 
@@ -128,6 +125,9 @@ Provide a helpful, encouraging response that helps them learn.`;
 
 async function callGroq(prompt: string): Promise<string> {
   const { GROQ_API_KEY } = await getAIKeys();
+  if (!GROQ_API_KEY) {
+    throw new Error("GROQ_API_KEY is not configured");
+  }
 
   try {
     const response = await fetch(
@@ -173,6 +173,9 @@ async function callGroq(prompt: string): Promise<string> {
 
 async function callHuggingFace(prompt: string): Promise<string> {
   const { HUGGINGFACE_API_KEY } = await getAIKeys();
+  if (!HUGGINGFACE_API_KEY) {
+    throw new Error("HUGGINGFACE_API_KEY is not configured");
+  }
 
   try {
     const response = await fetch(
@@ -250,22 +253,22 @@ export async function generateAIResponse(
       : prompts[action](content);
 
   try {
-    console.log("[v0] Attempting Groq API call for action:", action);
+    console.log(" Attempting Groq API call for action:", action);
     const result = await callGroq(prompt);
-    console.log("[v0] Groq API successful");
+    console.log(" Groq API successful");
     return result;
   } catch (groqError) {
     console.warn(
-      "[v0] Groq failed, attempting HuggingFace fallback:",
+      " Groq failed, attempting HuggingFace fallback:",
       groqError,
     );
     try {
-      console.log("[v0] Attempting HuggingFace fallback for action:", action);
+      console.log(" Attempting HuggingFace fallback for action:", action);
       const result = await callHuggingFace(prompt);
-      console.log("[v0] HuggingFace fallback successful");
+      console.log(" HuggingFace fallback successful");
       return result;
     } catch (hfError) {
-      console.error("[v0] Both AI services failed:", hfError);
+      console.error(" Both AI services failed:", hfError);
       throw new Error(
         "AI services are temporarily unavailable. Please try again in a moment. This usually resolves quickly.",
       );

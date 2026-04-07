@@ -28,6 +28,7 @@ import {
   GitBranch,
   MessageSquare,
   RotateCcw,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
@@ -104,7 +105,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
+    toast.success("Copied to clipboard!");
   };
 
   const saveToDocument = () => {
@@ -153,10 +154,12 @@ export function Editor({ initialDocument, userId }: EditorProps) {
 
     try {
       // Dynamically import PDF.js only when needed (client-side only)
-      const pdfjsLib = await import("pdfjs-dist");
-
-      // Set worker source
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+      const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
+      // Use bundled local worker (no CDN/network dependency).
+      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        "pdfjs-dist/legacy/build/pdf.worker.min.mjs",
+        import.meta.url,
+      ).toString();
 
       const arrayBuffer = await file.arrayBuffer();
       const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
@@ -196,7 +199,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
 
   const handleAiAction = async () => {
     if (usage >= limit) {
-      toast.error("Limit reached", {
+      toast.error("Your Daily Free Limit has Reached", {
         description:
           "You've reached your free daily limit. Upgrade to Pro for unlimited access.",
       });
@@ -328,7 +331,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
     if (!chatInput.trim()) return;
 
     if (usage >= limit) {
-      toast.error("Limit reached", {
+      toast.error("Limit Daily Free Limit has Reached", {
         description:
           "You've reached your free daily limit. Upgrade to Pro for unlimited access.",
       });
@@ -457,9 +460,10 @@ export function Editor({ initialDocument, userId }: EditorProps) {
             size="sm"
             onClick={() => fileInputRef.current?.click()}
             className="h-8 gap-2 text-xs font-bold text-primary hover:bg-primary/10 transition-colors"
+            disabled={content.length > 0}
           >
             <Upload className="w-3.5 h-3.5" />
-            Upload PDF
+            Upload PDF 
           </Button>
           <div className="h-4 w-px bg-border/40 mx-2" />
           <Button
@@ -484,7 +488,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
           <div className="h-4 w-px bg-border/40 mx-2" />
           <Button
             size="sm"
-            className="h-8 rounded-lg font-semibold shadow-sm hover:shadow-md transition-shadow"
+            className="h-8 rounded-sm font-semibold shadow-sm hover:shadow-md transition-shadow"
           >
             <Share2 className="w-3.5 h-3.5 mr-2" />
             Share
@@ -506,7 +510,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
 
             <div className="flex-1 relative group rounded-2xl border border-border/40 focus-within:border-primary/40 transition-colors bg-background/50 backdrop-blur-sm overflow-hidden flex flex-col">
               <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="bg-background/80 backdrop-blur-md border border-border/40 rounded-lg p-1.5 flex gap-1 shadow-sm">
+                <div className="bg-background/80 backdrop-blur-md border border-border/40 rounded-sm p-1.5 flex gap-1 shadow-sm">
                   <Button variant="ghost" size="icon" className="h-7 w-7">
                     <Bookmark className="w-3.5 h-3.5" />
                   </Button>
@@ -543,7 +547,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
           <div className="p-6 border-b border-border/40">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-sm bg-primary/10 flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-primary" />
                 </div>
                 <h3 className="font-bold text-foreground">AI Study Partner</h3>
@@ -553,7 +557,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
               </div>
             </div>
 
-            <div className="bg-background/40 p-1 rounded-xl border border-border/40 mb-4">
+            <div className="bg-background/40 p-1 rounded-md border border-border/40 mb-4">
               <Tabs
                 value={selectedAction}
                 onValueChange={(v) => {
@@ -568,19 +572,19 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                 <TabsList className="grid w-full grid-cols-3 bg-transparent border-0 p-0 gap-1">
                   <TabsTrigger
                     value="summarize"
-                    className="rounded-lg py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all text-xs font-bold"
+                    className="rounded-sm py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-xs font-bold cursor-pointer hover:scale-105 hover:bg-primary/30 hover:text-white hover:shadow-sm hover:scale-105 "
                   >
                     Summary
                   </TabsTrigger>
                   <TabsTrigger
                     value="explain"
-                    className="rounded-lg py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all text-xs font-bold"
+                    className="rounded-sm py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-blue-50 data-[state=active]:shadow-sm transition-all text-xs font-bold cursor-pointer hover:scale-105 hover:bg-primary/30 hover:text-white hover:shadow-sm"
                   >
                     Explain
                   </TabsTrigger>
                   <TabsTrigger
                     value="questions"
-                    className="rounded-lg py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all text-xs font-bold"
+                    className="rounded-sm py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-xs font-bold cursor-pointer hover:scale-105 hover:bg-primary/30 hover:text-white hover:shadow-sm  "
                   >
                     Practice
                   </TabsTrigger>
@@ -600,21 +604,21 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                 <TabsList className="grid w-full grid-cols-3 bg-transparent border-0 p-0 gap-1">
                   <TabsTrigger
                     value="flashcards"
-                    className="rounded-lg py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all text-xs font-bold"
+                    className="rounded-sm py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-xs font-bold cursor-pointer hover:scale-105 hover:bg-primary/30 hover:text-white hover:shadow-sm hover:scale-105 "
                   >
                     <CreditCard className="w-3 h-3 mr-1" />
                     Flashcards
                   </TabsTrigger>
                   <TabsTrigger
                     value="mindmap"
-                    className="rounded-lg py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all text-xs font-bold"
+                    className="rounded-sm py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-xs font-bold cursor-pointer hover:scale-105 hover:bg-primary/30 hover:text-white hover:shadow-sm hover:scale-105 "
                   >
                     <GitBranch className="w-3 h-3 mr-1" />
                     Mind Map
                   </TabsTrigger>
                   <TabsTrigger
                     value="chat"
-                    className="rounded-lg py-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all text-xs font-bold"
+                    className="rounded-sm py-2 data-[state=active]:bg-blue-800 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all text-xs font-bold cursor-pointer hover:scale-105 hover:bg-primary/30 hover:text-white hover:shadow-sm hover:scale-105 "
                   >
                     <MessageSquare className="w-3 h-3 mr-1" />
                     AI Tutor
@@ -627,7 +631,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
               <Button
                 onClick={handleAiAction}
                 disabled={isGenerating || !content.trim()}
-                className="w-full h-11 rounded-xl font-bold gap-2 text-sm shadow-lg shadow-primary/20 transition-all hover:shadow-primary/40 group active:scale-[0.98]"
+                className="w-full h-11 rounded-none font-bold gap-2 text-sm shadow-lg shadow-primary/20 transition-all  group active:scale-[0.98]"
               >
                 {isGenerating ? (
                   <>
@@ -670,7 +674,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                       className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[80%] rounded-lg p-3 ${
+                        className={`max-w-[80%] rounded-sm p-3 ${
                           msg.role === "user"
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted text-foreground"
@@ -684,7 +688,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                   ))}
                   {isGenerating && (
                     <div className="flex justify-start">
-                      <div className="bg-muted rounded-lg p-3">
+                      <div className="bg-muted rounded-sm p-3">
                         <div className="flex gap-1">
                           <div
                             className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce"
@@ -730,7 +734,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                     Card {currentFlashcardIndex + 1} of {flashcards.length}
                   </div>
                   <div
-                    className="bg-card border-2 border-border rounded-xl p-8 min-h-[300px] flex items-center justify-center cursor-pointer hover:border-primary/50 transition-colors"
+                    className="bg-card border-2 border-border rounded-md p-8 min-h-[300px] flex items-center justify-center cursor-pointer hover:border-primary/50 transition-colors"
                     onClick={() => setFlashcardFlipped(!flashcardFlipped)}
                   >
                     <div className="text-center">
@@ -810,12 +814,12 @@ export function Editor({ initialDocument, userId }: EditorProps) {
               </div>
             ) : isGenerating ? (
               <div className="flex-1 flex flex-col p-10 space-y-4">
-                <div className="h-4 bg-muted/50 rounded-lg w-3/4 animate-pulse"></div>
-                <div className="h-4 bg-muted/50 rounded-lg w-full animate-pulse"></div>
-                <div className="h-4 bg-muted/50 rounded-lg w-5/6 animate-pulse delay-75"></div>
-                <div className="h-4 bg-muted/50 rounded-lg w-2/3 animate-pulse delay-150"></div>
+                <div className="h-4 bg-muted/50 rounded-sm w-3/4 animate-pulse"></div>
+                <div className="h-4 bg-muted/50 rounded-sm w-full animate-pulse"></div>
+                <div className="h-4 bg-muted/50 rounded-sm w-5/6 animate-pulse delay-75"></div>
+                <div className="h-4 bg-muted/50 rounded-sm w-2/3 animate-pulse delay-150"></div>
                 <div className="pt-6 space-y-4 opacity-50">
-                  <div className="h-32 bg-muted/30 rounded-xl w-full animate-pulse"></div>
+                  <div className="h-32 bg-muted/30 rounded-md w-full animate-pulse"></div>
                 </div>
               </div>
             ) : (
@@ -828,7 +832,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-lg hover:bg-muted"
+                      className="h-8 w-8 rounded-sm hover:bg-muted"
                       onClick={() => copyToClipboard(aiOutput)}
                     >
                       <Copy className="w-4 h-4" />
@@ -836,7 +840,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-lg hover:bg-muted"
+                      className="h-8 w-8 rounded-sm hover:bg-muted"
                       onClick={saveToDocument}
                     >
                       <Save className="w-4 h-4" />

@@ -24,6 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { CreateDocumentDialog } from "./create-document-dialog";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface Document {
   id: string;
@@ -81,11 +82,11 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
   };
 
   return (
-    <div className="w-72 bg-gradient-to-b from-background to-background/95 border-r border-border/50 flex flex-col h-screen sticky top-0 shadow-lg">
+    <div className="w-72 bg-linear-to-b from-background to-background/95 border-r border-border/50 flex flex-col h-screen sticky top-0 shadow-lg">
       {/* Logo & Brand */}
       <div className="p-6 border-b border-border/50">
         <Link href="/" className="flex items-center gap-3 mb-6 group">
-          <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+          <div className="w-12 h-12 flex items-center justify-center rounded-md bg-linear-to-br from-primary/20 to-primary/10 border border-primary/20 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
             <img
               src="/logo.png"
               alt="StudyOS"
@@ -109,9 +110,9 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
         >
           <Button
             size="lg"
-            className="w-full gap-2 rounded-xl shadow-md hover:shadow-lg transition-all bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary font-semibold"
+            className="w-full gap-2 shadow-md hover:shadow-lg transition-all bg-linear-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary font-semibold rounded-none group"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-5 h-5 group-hover:scale-125 transition-all" />
             <span>New Document</span>
           </Button>
         </CreateDocumentDialog>
@@ -130,7 +131,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
               <Link key={item.href} href={item.href}>
                 <div
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer group",
+                    "flex items-center gap-3 px-3 py-2.5 rounded-sm transition-all cursor-pointer group",
                     active
                       ? "bg-primary/10 text-primary font-semibold shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -174,7 +175,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
                   <Link key={doc.id} href={`/dashboard/${doc.id}`}>
                     <div
                       className={cn(
-                        "p-3 rounded-lg transition-all cursor-pointer group border",
+                        "p-3 rounded-sm transition-all cursor-pointer group border",
                         isDocActive
                           ? "bg-primary/5 border-primary/20 shadow-sm"
                           : "border-transparent hover:bg-muted/30 hover:border-border/50",
@@ -183,7 +184,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
                       <div className="flex items-start gap-2">
                         <FileText
                           className={cn(
-                            "w-4 h-4 mt-0.5 flex-shrink-0",
+                            "w-4 h-4 mt-0.5 shrink-0",
                             isDocActive
                               ? "text-primary"
                               : "text-muted-foreground",
@@ -227,9 +228,9 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
         {user?.plan_type && (
           <div
             className={cn(
-              "px-3 py-2 rounded-lg border mb-2",
+              "px-3 py-2 rounded-sm border mb-2",
               user.plan_type === "pro"
-                ? "bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20"
+                ? "bg-linear-to-r from-primary/10 to-primary/5 border-primary/20"
                 : "bg-muted/30 border-border/50",
             )}
           >
@@ -257,9 +258,9 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
         )}
 
         {/* User Info */}
-        <div className="px-3 py-2.5 bg-muted/30 rounded-lg border border-border/50">
+        <div className="px-3 py-2.5 bg-muted/30 rounded-sm border border-border/50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary/20 to-primary/10 border border-primary/20 flex items-center justify-center">
               <User className="w-4 h-4 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
@@ -275,11 +276,14 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
 
         {/* Settings & Logout */}
         <div className="flex gap-2">
+          <div className="flex items-center justify-center">
+            <ThemeToggle className="h-8 w-8" />
+          </div>
           <Link href="/dashboard/settings" className="flex-1">
             <Button
               variant="ghost"
               size="sm"
-              className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-lg text-xs"
+              className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-sm text-xs"
             >
               <Settings className="w-3.5 h-3.5 mr-2" />
               Settings
@@ -290,7 +294,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
               type="submit"
               variant="ghost"
               size="sm"
-              className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg text-xs"
+              className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-sm text-xs"
             >
               <LogOut className="w-3.5 h-3.5 mr-2" />
               Logout

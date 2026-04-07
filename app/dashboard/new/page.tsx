@@ -87,11 +87,11 @@ export default function NewDocumentPage() {
                   disabled={isLoading}
                   required
                   autoFocus
-                  className="h-14 rounded-xl border-border/50 bg-background/50 text-lg font-semibold px-6 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30"
+                  className="h-14 rounded-md border-border/50 bg-background/50 text-lg font-semibold px-6 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30"
                 />
               </div>
               <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                 <Button type="submit" disabled={isLoading} className="flex-1 h-14 rounded-xl text-md font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-[0.98] transition-all gap-2">
+                 <Button type="submit" disabled={isLoading} className="flex-1 h-14 rounded-md text-md font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-[0.98] transition-all gap-2">
                     {isLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
@@ -101,7 +101,7 @@ export default function NewDocumentPage() {
                       </>
                     )}
                  </Button>
-                 <Button type="button" variant="ghost" className="h-14 px-8 rounded-xl font-bold" asChild>
+                 <Button type="button" variant="ghost" className="h-14 px-8 rounded-md font-bold" asChild>
                    <Link href="/dashboard">Cancel</Link>
                  </Button>
               </div>

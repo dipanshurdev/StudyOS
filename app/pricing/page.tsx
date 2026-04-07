@@ -9,13 +9,18 @@ import {
   Building2,
 } from "lucide-react";
 
+const founderEmail = "dipanshurdev@gmail.com";
+const proMailto = `mailto:${founderEmail}?subject=StudyOS%20Pro%20Plan%20Interest&
+body=Hi%20Dipanshu%2C%0A%0AI%20am%20interested%20in%20the%20Pro%20plan.%20Please%20share%20next%20steps.%0A%0AThanks!`;
+const enterpriseMailto = `mailto:${founderEmail}?subject=StudyOS%20Enterprise%20Plan%20Inquiry&body=Hi%20Dipanshu%2C%0A%0AI%20am%20interested%20in%20the%20Enterprise%20plan.%20Please%20share%20next%20steps.%0A%0AThanks!`;
+
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
+    <div className="min-h-screen bg-linear-to-b from-background via-background to-primary/5">
       {/* Navigation */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-border/30">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-xl bg-primary/10 p-1 border border-primary/20 shadow-sm transition-all group-hover:shadow-md group-hover:border-primary/30">
+          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-md bg-primary/10 p-1 border border-primary/20 shadow-sm transition-all group-hover:shadow-md group-hover:border-primary/30">
             <img
               src="/logo.png"
               alt="StudyOS Logo"
@@ -58,6 +63,9 @@ export default function PricingPage() {
           <p className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
             No credit card required for Free
+          </p>
+          <p className="text-xs text-muted-foreground mt-2">
+            Payments are launching soon. For paid plans, contact founder directly.
           </p>
         </div>
 
@@ -102,7 +110,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pro Plan */}
-          <div className="bg-gradient-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative hover:shadow-xl transition-shadow">
+          <div className="bg-linear-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative hover:shadow-xl transition-shadow">
             <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
               Most Popular
             </div>
@@ -139,11 +147,11 @@ export default function PricingPage() {
               ))}
             </ul>
 
-            <Link href="/login" className="block">
-              <Button className="w-full">Start Pro trial</Button>
-            </Link>
+            <Button asChild className="w-full">
+              <a href={proMailto}>Contact founder for Pro</a>
+            </Button>
             <p className="text-xs text-muted-foreground text-center mt-3">
-              7-day free trial • Cancel anytime
+              Payments are not live yet • Quick manual onboarding available
             </p>
           </div>
 
@@ -179,11 +187,9 @@ export default function PricingPage() {
               ))}
             </ul>
 
-            <Link href="/login" className="block">
-              <Button variant="outline" className="w-full">
-                Contact sales
-              </Button>
-            </Link>
+            <Button asChild variant="outline" className="w-full">
+              <a href={enterpriseMailto}>Contact founder</a>
+            </Button>
           </div>
         </div>
 
@@ -208,11 +214,11 @@ export default function PricingPage() {
               },
               {
                 q: "Is there a free trial for Pro?",
-                a: "Yes! Pro includes a 7-day free trial. No credit card required to start.",
+                a: "Payments are launching soon. Contact founder for early access and onboarding details.",
               },
               {
                 q: "What payment methods do you accept?",
-                a: "We accept all major credit cards, PayPal, and bank transfers for Enterprise plans.",
+                a: "Payment options are being finalized. Contact founder now and we will share the available method for your plan.",
               },
               {
                 q: "Can I use StudyOS offline?",
@@ -236,7 +242,11 @@ export default function PricingPage() {
             Our team is here to help you succeed.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline">Contact support</Button>
+            <Button asChild variant="outline">
+              <a href={`mailto:${founderEmail}?subject=StudyOS%20Pricing%20Question`}>
+                Contact founder
+              </a>
+            </Button>
             <Link href="/login">
               <Button>Start free trial</Button>
             </Link>
