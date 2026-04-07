@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# git remote set-url origin git@github-personal:dipanshurdev/dipanshurdev-site.git
+
+git@github.com:dipanshurdev/StudyOS.git
+
 # dependencies
 /node_modules
 
