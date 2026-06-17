@@ -62,7 +62,7 @@ export function DocumentList({ initialDocuments }: DocumentListProps) {
           <p className="text-muted-foreground mt-1">{documents.length} document(s)</p>
         </div>
         <CreateDocumentDialog open={openDialog} onOpenChange={setOpenDialog} onDocumentCreated={handleDocumentCreated}>
-          <Button gap="2" className="gap-2">
+          <Button className="gap-2">
             <Plus className="w-4 h-4" />
             New document
           </Button>

@@ -14,7 +14,6 @@ import {
   Target,
   Brain,
   ArrowLeft,
-  MoreHorizontal,
   Info,
   Sparkles,
 } from "lucide-react";
@@ -114,19 +113,20 @@ export default async function AnalyticsPage() {
         <div className="absolute -right-24 bottom-20 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/20" />
       </div>
       {/* Analytics Header */}
-      <div className="border-b border-border/40 bg-card/70 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+      <div className="border-b border-border/60 bg-card/80 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <Link href="/dashboard">
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 rounded-full"
+                className="h-7 w-7 p-0 text-muted-foreground"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             </Link>
-            <h1 className="font-bold text-lg tracking-tight">
+            <div className="h-4 w-px bg-border" />
+            <h1 className="font-semibold text-sm text-foreground">
               Learning Insights
             </h1>
           </div>
@@ -134,12 +134,9 @@ export default async function AnalyticsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-sm h-8 text-[10px] uppercase font-bold tracking-widest bg-background/50"
+              className="h-7 text-xs"
             >
               Export Report
-            </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <MoreHorizontal className="w-4 h-4" />
             </Button>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getUserDocuments, getOrCreateUser } from "@/lib/db";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Plus,
   Zap,
@@ -11,7 +10,6 @@ import {
   ChevronRight,
   Sparkles,
   Clock,
-  Calendar,
   ArrowRight,
   TrendingUp,
   CreditCard,
@@ -20,6 +18,7 @@ import {
   Crown,
   Flame,
   FileText,
+  Activity,
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -32,9 +31,7 @@ export default async function DashboardPage() {
     data: { user: authUser },
   } = await supabase.auth.getUser();
 
-  if (!authUser) {
-    redirect("/login");
-  }
+  if (!authUser) redirect("/login");
 
   let userDetails;
   try {
@@ -45,7 +42,6 @@ export default async function DashboardPage() {
         authUser.user_metadata.full_name || authUser.email!.split("@")[0],
     });
   } catch (e) {
-    console.error("Failed to fetch user details", e);
     userDetails = {
       plan_type: "free",
       ai_credits_used_today: 0,
@@ -58,321 +54,277 @@ export default async function DashboardPage() {
   const documents = await getUserDocuments(authUser.id);
 
   const dailyLimit = userDetails.plan_type === "pro" ? 100 : 10;
-  const remainingActions = Math.max(
-    0,
-    dailyLimit - (userDetails.ai_credits_used_today || 0)
-  );
-  const usagePercentage = Math.min(
-    100,
-    ((userDetails.ai_credits_used_today || 0) / dailyLimit) * 100
-  );
+  const used = userDetails.ai_credits_used_today || 0;
+  const remaining = Math.max(0, dailyLimit - used);
+  const usagePct = Math.min(100, (used / dailyLimit) * 100);
+  const isPro = userDetails.plan_type === "pro";
 
-  const stats = [
-    {
-      label: "AI actions left",
-      value: `${remainingActions}`,
-      subValue: `of ${dailyLimit} today`,
-      icon: Zap,
-      color: "text-amber-500",
-      bg: "bg-amber-500/10",
-      border: "border-amber-500/20",
-    },
-    {
-      label: "Documents",
-      value: documents.length || 0,
-      subValue: "In your workspace",
-      icon: BookOpen,
-      color: "text-blue-500",
-      bg: "bg-blue-500/10",
-      border: "border-blue-500/20",
-    },
-    {
-      label: "Study streak",
-      value: `${userDetails.study_streak || 0}`,
-      subValue: `Best: ${userDetails.longest_streak || 0} days`,
-      icon: Flame,
-      color: "text-orange-500",
-      bg: "bg-orange-500/10",
-      border: "border-orange-500/20",
-    },
-    {
-      label: "Plan",
-      value: userDetails.plan_type === "pro" ? "Pro" : "Free",
-      subValue:
-        userDetails.plan_type === "pro" ? "Unlimited AI" : "Upgrade for more",
-      icon: userDetails.plan_type === "pro" ? Crown : Sparkles,
-      color:
-        userDetails.plan_type === "pro"
-          ? "text-primary"
-          : "text-muted-foreground",
-      bg: userDetails.plan_type === "pro" ? "bg-primary/10" : "bg-muted/50",
-      border:
-        userDetails.plan_type === "pro"
-          ? "border-primary/20"
-          : "border-border/50",
-    },
-  ];
+  const hours = new Date().getHours();
+  const greeting =
+    hours < 12 ? "Good morning" : hours < 17 ? "Good afternoon" : "Good evening";
+  const firstName = userDetails.display_name?.split(" ")[0] || "there";
 
   return (
-    <div className="relative min-h-screen bg-linear-to-br from-background via-background to-muted/10">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-primary/10 blur-3xl dark:bg-primary/15" />
-        <div className="absolute left-1/3 bottom-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-500/15" />
+    <div className="min-h-screen bg-background">
+      {/* Subtle background texture */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-primary/5 blur-[100px]" />
+        <div className="absolute left-1/4 bottom-0 h-[400px] w-[400px] rounded-full bg-blue-500/4 blur-[100px]" />
       </div>
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8 rounded-2xl border border-border/40 bg-card/50 backdrop-blur-sm p-6 md:p-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-1 tracking-tight">
-                Hey, {userDetails.display_name?.split(" ")[0] || "there"} 👋
-              </h1>
-              <p className="text-muted-foreground text-sm md:text-base">
-                {new Date().toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}
-                — here&apos;s your study hub.
-              </p>
-            </div>
-            <Link href="/dashboard/new" className="shrink-0">
-              <Button
-                size="lg"
-                  className="gap-2 shadow-md hover:shadow-lg transition-shadow w-full sm:w-auto"
-              >
-                <Plus className="w-5 h-5" />
+
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+
+        {/* ── Header ─────────────────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div>
+            <p className="text-sm text-muted-foreground mb-1">
+              {new Date().toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">
+              {greeting}, {firstName}
+            </h1>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="/dashboard/analytics">
+              <Button variant="outline" size="sm" className="h-8 gap-1.5 text-xs">
+                <Activity className="w-3.5 h-3.5" />
+                Analytics
+              </Button>
+            </Link>
+            <Link href="/dashboard/new">
+              <Button size="sm" className="h-8 gap-1.5 text-xs font-semibold shadow-sm">
+                <Plus className="w-3.5 h-3.5" />
                 New document
               </Button>
             </Link>
           </div>
         </div>
 
-        {/* Usage Progress Bar */}
-        {userDetails.plan_type === "free" && (
-          <Card className="mb-8 border-primary/20 bg-linear-to-r from-primary/5 to-primary/10">
-            <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-sm bg-primary/20 flex items-center justify-center shrink-0">
-                    <Zap className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">
-                      Today&apos;s AI usage
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {remainingActions} of {dailyLimit} actions left today
-                    </p>
-                  </div>
-                </div>
-                <Link href="/pricing" className="shrink-0">
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Crown className="w-4 h-4" />
-                    Upgrade to Pro
-                  </Button>
-                </Link>
-              </div>
-              <div className="w-full bg-muted/50 rounded-full h-2.5 overflow-hidden">
-                <div
-                  className="h-full bg-linear-to-r from-primary to-primary/80 rounded-full transition-all duration-500"
-                  style={{ width: `${usagePercentage}%` }}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, i) => {
+        {/* ── Stats ──────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {[
+            {
+              label: "AI actions left",
+              value: remaining,
+              sub: `${used} used today`,
+              icon: Zap,
+              color: "text-amber-500",
+              iconBg: "bg-amber-500/10",
+              accent: remaining === 0 ? "border-red-200 dark:border-red-900" : "",
+            },
+            {
+              label: "Documents",
+              value: documents.length || 0,
+              sub: "in workspace",
+              icon: BookOpen,
+              color: "text-blue-500",
+              iconBg: "bg-blue-500/10",
+              accent: "",
+            },
+            {
+              label: "Study streak",
+              value: `${userDetails.study_streak || 0}d`,
+              sub: `Best: ${userDetails.longest_streak || 0} days`,
+              icon: Flame,
+              color: "text-orange-500",
+              iconBg: "bg-orange-500/10",
+              accent: "",
+            },
+            {
+              label: "Plan",
+              value: isPro ? "Pro" : "Free",
+              sub: isPro ? "Unlimited AI" : "10 actions/day",
+              icon: isPro ? Crown : Sparkles,
+              color: isPro ? "text-primary" : "text-muted-foreground",
+              iconBg: isPro ? "bg-primary/10" : "bg-muted",
+              accent: isPro ? "border-primary/20" : "",
+            },
+          ].map((stat, i) => {
             const Icon = stat.icon;
             return (
-              <Card
+              <div
                 key={i}
-                className={`group hover:shadow-lg transition-all duration-300 border ${stat.border} bg-card/50 backdrop-blur-sm overflow-hidden relative`}
+                className={cn(
+                  "bg-card border rounded-xl p-4 space-y-3 transition-shadow hover:shadow-sm",
+                  stat.accent || "border-border"
+                )}
               >
-                <div
-                  className={`absolute top-0 left-0 w-1 h-full ${stat.bg
-                    .replace("bg", "bg-linear-to-b")
-                    .replace("/10", "/20")} transition-all group-hover:w-1.5`}
-                ></div>
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div
-                      className={`p-3 rounded-md ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">
-                      {stat.label}
-                    </p>
-                    <h3 className="text-3xl font-bold tracking-tight text-foreground mb-1">
-                      {stat.value}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">
-                      {stat.subValue}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", stat.iconBg)}>
+                  <Icon className={cn("w-4 h-4", stat.color)} />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
+                  <p className="text-[11px] text-muted-foreground/70 mt-0.5">{stat.sub}</p>
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* Quick Actions */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-foreground mb-3">
-            What do you want to do?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* ── Usage bar (free users) ─────────────────────────── */}
+        {!isPro && (
+          <div className="bg-card border border-border rounded-xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Zap className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">Daily AI usage</p>
+                  <p className="text-xs text-muted-foreground">
+                    {remaining} of {dailyLimit} actions remaining · resets at midnight UTC
+                  </p>
+                </div>
+              </div>
+              <Link href="/pricing">
+                <Button size="sm" variant="outline" className="h-7 text-xs gap-1.5">
+                  <Crown className="w-3 h-3" />
+                  Upgrade
+                </Button>
+              </Link>
+            </div>
+            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+              <div
+                className={cn(
+                  "h-full rounded-full transition-all duration-700",
+                  usagePct >= 90
+                    ? "bg-red-500"
+                    : usagePct >= 70
+                    ? "bg-amber-500"
+                    : "bg-primary"
+                )}
+                style={{ width: `${usagePct}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* ── Quick actions ─────────────────────────────────── */}
+        <div>
+          <h2 className="text-sm font-semibold text-foreground mb-3">Start with AI</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               {
                 title: "Flashcards",
-                description: "Generate cards from any document in one click",
+                description: "Turn any material into study cards",
                 icon: CreditCard,
-                href: "/dashboard/new",
-                color: "from-blue-500/10 to-blue-500/5",
-                iconColor: "text-blue-500",
+                color: "text-blue-500",
+                bg: "bg-blue-500/8",
+                hover: "hover:border-blue-300 dark:hover:border-blue-800",
               },
               {
-                title: "Mind map",
-                description: "Turn a topic into a visual map",
+                title: "Mind Map",
+                description: "Visualize concepts and connections",
                 icon: GitBranch,
-                href: "/dashboard/new",
-                color: "from-purple-500/10 to-purple-500/5",
-                iconColor: "text-purple-500",
+                color: "text-violet-500",
+                bg: "bg-violet-500/8",
+                hover: "hover:border-violet-300 dark:hover:border-violet-800",
               },
               {
-                title: "AI tutor",
-                description: "Ask questions and get instant explanations",
+                title: "AI Tutor",
+                description: "Ask anything about your notes",
                 icon: MessageSquare,
-                href: "/dashboard/new",
-                color: "from-emerald-500/10 to-emerald-500/5",
-                iconColor: "text-emerald-500",
+                color: "text-emerald-500",
+                bg: "bg-emerald-500/8",
+                hover: "hover:border-emerald-300 dark:hover:border-emerald-800",
               },
             ].map((action, idx) => {
               const Icon = action.icon;
               return (
-                <Link key={idx} href={action.href}>
-                  <Card className={`bg-linear-to-br ${action.color} border-border/50 hover:border-primary/30 hover:shadow-md transition-all cursor-pointer group h-full`}>
-                    <CardContent className="p-6">
-                      <div
-                        className={`w-12 h-12 rounded-md bg-background/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
-                      >
-                        <Icon className={`w-6 h-6 ${action.iconColor}`} />
-                      </div>
-                      <h3 className="font-semibold text-foreground mb-1">
-                        {action.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {action.description}
-                      </p>
-                    </CardContent>
-                  </Card>
+                <Link key={idx} href="/dashboard/new">
+                  <div
+                    className={cn(
+                      "group bg-card border border-border rounded-xl p-4 cursor-pointer transition-all duration-150",
+                      "hover:shadow-sm",
+                      action.hover
+                    )}
+                  >
+                    <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center mb-3", action.bg)}>
+                      <Icon className={cn("w-4.5 h-4.5", action.color)} />
+                    </div>
+                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {action.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
+                      {action.description}
+                    </p>
+                  </div>
                 </Link>
               );
             })}
           </div>
         </div>
 
-        {/* Recent Documents */}
+        {/* ── Recent documents ──────────────────────────────── */}
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-foreground">
-              Recent documents
-            </h2>
-            <Link href="/dashboard/analytics">
-              <Button variant="ghost" size="sm" className="gap-2">
-                View Analytics
-                <BarChart3 className="w-4 h-4" />
-              </Button>
-            </Link>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-semibold text-foreground">Recent documents</h2>
+            {documents.length > 0 && (
+              <Link href="/dashboard/analytics">
+                <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-muted-foreground">
+                  View all
+                  <ChevronRight className="w-3 h-3" />
+                </Button>
+              </Link>
+            )}
           </div>
 
           {!documents || documents.length === 0 ? (
-            <Card className="border-2 border-dashed border-border/50 bg-muted/20">
-              <CardContent className="flex flex-col items-center justify-center py-14 md:py-16 px-4 text-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-5 border border-primary/20">
-                  <BookOpen className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-1.5">
-                  Your workspace is ready
-                </h3>
-                <p className="text-muted-foreground text-sm max-w-sm mb-6">
-                  Create a document to get started. Upload a PDF, paste your
-                  notes, or type—then use AI to summarize, make flashcards, or
-                  chat with the tutor.
-                </p>
-                <Link href="/dashboard/new">
-                  <Button className="gap-2 shadow-sm">
-                    <Plus className="w-4 h-4" />
-                    Create your first document
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <div className="border-2 border-dashed border-border rounded-xl py-14 flex flex-col items-center justify-center text-center px-6">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 border border-primary/15">
+                <BookOpen className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-sm font-semibold text-foreground mb-1">Your workspace is empty</h3>
+              <p className="text-xs text-muted-foreground max-w-xs mb-5 leading-relaxed">
+                Create a document, paste your notes or upload a PDF, then let AI do the rest.
+              </p>
+              <Link href="/dashboard/new">
+                <Button size="sm" className="gap-1.5 text-xs h-8">
+                  <Plus className="w-3.5 h-3.5" />
+                  Create first document
+                </Button>
+              </Link>
+            </div>
           ) : (
-            <div className="grid gap-4">
-              {documents.slice(0, 6).map((doc: any) => (
-                <Link
-                  key={doc.id}
-                  href={`/dashboard/${doc.id}`}
-                  className="group block"
-                >
-                  <Card className="bg-card/50 hover:bg-card border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md group-hover:-translate-y-0.5 overflow-hidden relative">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-primary/60 to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between gap-6">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center shrink-0">
-                              <FileText className="w-5 h-5 text-primary" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-lg text-foreground truncate group-hover:text-primary transition-colors">
-                                {doc.title}
-                              </h4>
-                              <p className="text-sm text-muted-foreground line-clamp-1 mt-1">
-                                {doc.content
-                                  ? doc.content.substring(0, 100) + "..."
-                                  : "Empty document"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-4 shrink-0">
-                          <div className="text-right hidden sm:block">
-                            <p className="text-xs font-semibold text-foreground flex items-center gap-1 justify-end">
-                              <Clock className="w-3 h-3 text-muted-foreground" />
-                              {doc.created_at
-                                ? formatDistanceToNow(
-                                    new Date(doc.created_at),
-                                    {
-                                      addSuffix: true,
-                                    }
-                                  )
-                                : "N/A"}
-                            </p>
-                          </div>
-                          <div className="w-10 h-10 rounded-sm bg-background border border-border/50 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 group-hover:shadow-lg">
-                            <ArrowRight className="w-5 h-5" />
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+            <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+              {documents.slice(0, 7).map((doc: any) => (
+                <Link key={doc.id} href={`/dashboard/${doc.id}`} className="group block">
+                  <div className="flex items-center gap-3 px-4 py-3 hover:bg-muted/40 transition-colors duration-100">
+                    <div className="w-8 h-8 rounded-lg bg-primary/8 flex items-center justify-center shrink-0 group-hover:bg-primary/15 transition-colors">
+                      <FileText className="w-3.5 h-3.5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">
+                        {doc.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate mt-0.5">
+                        {doc.content
+                          ? doc.content.substring(0, 72) + "…"
+                          : "Empty document"}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-[11px] text-muted-foreground hidden sm:block">
+                        {doc.created_at
+                          ? formatDistanceToNow(new Date(doc.created_at), { addSuffix: true })
+                          : "—"}
+                      </span>
+                      <ArrowRight className="w-3.5 h-3.5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-150" />
+                    </div>
+                  </div>
                 </Link>
               ))}
-              {documents.length > 6 && (
-                <div className="text-center pt-4">
+              {documents.length > 7 && (
+                <div className="px-4 py-2.5 text-center">
                   <Link href="/dashboard/analytics">
-                    <Button variant="outline" className="gap-2">
-                      View all {documents.length} documents
-                      <ChevronRight className="w-4 h-4" />
+                    <Button variant="ghost" size="sm" className="h-7 text-xs gap-1 text-muted-foreground">
+                      +{documents.length - 7} more documents
+                      <ChevronRight className="w-3 h-3" />
                     </Button>
                   </Link>
                 </div>
@@ -380,7 +332,12 @@ export default async function DashboardPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
+}
+
+// Local cn helper (avoids extra import for this file if needed)
+function cn(...classes: (string | undefined | false | null)[]) {
+  return classes.filter(Boolean).join(" ");
 }

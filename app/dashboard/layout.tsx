@@ -40,14 +40,10 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="relative flex h-screen bg-linear-to-br from-background via-background to-muted/20">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-primary/10 blur-3xl dark:bg-primary/20" />
-        <div className="absolute -right-24 bottom-1/4 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-500/20" />
-      </div>
+    <div className="flex h-screen bg-background overflow-hidden">
       <ModernSidebar user={userData} />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <main className="flex-1 overflow-auto bg-background/50">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+        <main className="flex-1 overflow-auto">
           {children}
         </main>
       </div>
