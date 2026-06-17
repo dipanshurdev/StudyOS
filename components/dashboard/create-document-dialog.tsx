@@ -60,25 +60,26 @@ export function CreateDocumentDialog({ children, open, onOpenChange, onDocumentC
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-2xl font-black tracking-tight">Create Study Hub</DialogTitle>
-          <DialogDescription className="text-sm font-medium">
-            Name your document or upload a PDF inside the editor to get started. 🚀
+          <DialogTitle className="text-base font-semibold">New document</DialogTitle>
+          <DialogDescription className="text-sm">
+            Give your document a title. You can add notes or upload a PDF inside the editor.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <Input
-            placeholder="e.g., Biology Chapter 3 Notes"
+            placeholder="e.g., Biology Chapter 3 — Cell Division"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+            className="h-10"
             autoFocus
           />
-          <div className="flex gap-3 justify-end">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" size="sm" className="h-8 text-xs" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button onClick={handleCreate} disabled={!title.trim() || isLoading}>
-              {isLoading ? "Creating..." : "Create"}
+            <Button size="sm" className="h-8 text-xs" onClick={handleCreate} disabled={!title.trim() || isLoading}>
+              {isLoading ? "Creating…" : "Create document"}
             </Button>
           </div>
         </div>

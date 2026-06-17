@@ -1,170 +1,147 @@
-import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { LogOut, Bell, Shield, Download } from "lucide-react"
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LogOut, Bell, Shield, Download, User, ChevronLeft } from "lucide-react";
+import Link from "next/link";
+
+function SettingsSection({ title, description, icon: Icon, children }: {
+  title: string; description: string; icon: any; children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="px-5 py-4 border-b border-border/60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-muted flex items-center justify-center">
+            <Icon className="w-3.5 h-3.5 text-muted-foreground" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+            <p className="text-xs text-muted-foreground">{description}</p>
+          </div>
+        </div>
+      </div>
+      <div className="p-5">{children}</div>
+    </div>
+  );
+}
+
+function SettingsRow({ label, description, action }: { label: string; description: string; action?: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between py-3 border-b border-border/40 last:border-0">
+      <div>
+        <p className="text-sm font-medium text-foreground">{label}</p>
+        <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
+      </div>
+      {action && <div className="ml-4 shrink-0">{action}</div>}
+    </div>
+  );
+}
 
 export default async function SettingsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  if (!user) {
-    redirect("/login")
-  }
-  
-  // Fetch profile if needed, or rely on user metadata
-  const name = user.user_metadata.full_name || user.email?.split('@')[0] || "User"
+  const name = user.user_metadata.full_name || user.email?.split("@")[0] || "User";
+  const initials = name.split(" ").map((p: string) => p[0]).join("").toUpperCase().slice(0, 2);
 
   return (
-    <div className="relative flex-1 overflow-auto bg-background">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute right-0 top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl dark:bg-primary/20" />
+    <div className="min-h-screen bg-background">
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute right-0 top-20 h-64 w-64 rounded-full bg-primary/5 blur-[80px]" />
       </div>
-      <div className="max-w-2xl mx-auto px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
-          <p className="text-muted-foreground">Manage your account and preferences</p>
+
+      {/* Header */}
+      <div className="border-b border-border/60 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-6 h-14 flex items-center gap-3">
+          <Link href="/dashboard">
+            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground">
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+          </Link>
+          <div className="h-4 w-px bg-border" />
+          <h1 className="text-sm font-semibold text-foreground">Settings</h1>
         </div>
+      </div>
 
-        <div className="space-y-6">
-          {/* Account Settings */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
-            <CardHeader>
-              <CardTitle className="text-lg">Account Information</CardTitle>
-              <CardDescription>Your account details and profile information</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Email Address</label>
-                <Input
-                  type="email"
-                  value={user.email || ""}
-                  disabled
-                  className="bg-muted/50 text-muted-foreground border-border/50"
-                />
-                <p className="text-xs text-muted-foreground">Your email address cannot be changed</p>
-              </div>
+      <div className="max-w-2xl mx-auto px-6 py-8 space-y-4">
+        {/* Account */}
+        <SettingsSection title="Account" description="Your profile and login details" icon={User}>
+          <div className="flex items-center gap-4 mb-5 pb-5 border-b border-border/50">
+            <div className="w-12 h-12 rounded-full bg-primary/15 border-2 border-primary/20 flex items-center justify-center shrink-0">
+              <span className="text-sm font-bold text-primary">{initials}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground truncate">{name}</p>
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Email address</label>
+              <Input value={user.email || ""} disabled className="h-9 text-sm bg-muted/40" />
+              <p className="text-[11px] text-muted-foreground/60">Your email cannot be changed</p>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Display name</label>
+              <Input value={name} disabled className="h-9 text-sm bg-muted/40" />
+              <p className="text-[11px] text-muted-foreground/60">Synced from your Google account</p>
+            </div>
+          </div>
+        </SettingsSection>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Full Name</label>
-                <Input
-                  type="text"
-                  value={name}
-                  disabled
-                  className="bg-muted/50 text-muted-foreground border-border/50"
-                />
-                <p className="text-xs text-muted-foreground">Linked from your Google account</p>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Usage */}
+        <SettingsSection title="Usage" description="Daily AI action limits" icon={Bell}>
+          <div className="bg-primary/5 border border-primary/15 rounded-lg p-4">
+            <p className="text-sm font-semibold text-foreground mb-1">Free Plan</p>
+            <p className="text-xs text-muted-foreground mb-3">
+              10 free AI actions per day, resetting at midnight UTC.
+            </p>
+            <Link href="/pricing">
+              <Button size="sm" className="h-8 text-xs gap-1.5">Upgrade to Pro</Button>
+            </Link>
+          </div>
+        </SettingsSection>
 
-          <Separator className="bg-border/30" />
+        {/* Security */}
+        <SettingsSection title="Privacy & Security" description="Data and account security settings" icon={Shield}>
+          <SettingsRow
+            label="Data encryption"
+            description="All documents are encrypted in transit via TLS"
+            action={<span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">Active</span>}
+          />
+          <SettingsRow
+            label="Two-factor authentication"
+            description="Add an extra layer of security to your account"
+            action={<Button variant="outline" size="sm" className="h-7 text-xs">Enable</Button>}
+          />
+        </SettingsSection>
 
-          {/* Usage Settings */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Bell className="w-5 h-5" />
-                Usage Tracking
-              </CardTitle>
-              <CardDescription>Control how your usage is tracked and displayed</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-primary/5 border border-primary/20 rounded-sm">
-                <h4 className="font-medium text-foreground mb-2">Your Daily Limit</h4>
-                <p className="text-sm text-muted-foreground mb-4">
-                  You get 5 free AI actions per day. This resets daily at midnight UTC.
-                </p>
-                <Button variant="outline" size="sm">
-                  View Usage Details
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Data */}
+        <SettingsSection title="Data & Export" description="Download or manage your data" icon={Download}>
+          <p className="text-sm text-muted-foreground mb-4">Export all documents and settings as a backup archive.</p>
+          <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5">
+            <Download className="w-3.5 h-3.5" />Export all data
+          </Button>
+        </SettingsSection>
 
-          <Separator className="bg-border/30" />
-
-          {/* Privacy Settings */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Shield className="w-5 h-5" />
-                Privacy & Security
-              </CardTitle>
-              <CardDescription>Manage your data and security preferences</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-sm">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Data Encryption</p>
-                    <p className="text-xs text-muted-foreground">Your documents are encrypted in transit</p>
-                  </div>
-                  <span className="text-xs font-semibold text-green-600 dark:text-green-400">Enabled</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 bg-muted/30 rounded-sm">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Two-Factor Auth</p>
-                    <p className="text-xs text-muted-foreground">Add extra security to your account</p>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    Enable
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Separator className="bg-border/30" />
-
-          {/* Data Export */}
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-md">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Download className="w-5 h-5" />
-                Data & Export
-              </CardTitle>
-              <CardDescription>Download or manage your personal data</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">Export all your documents and settings as a backup.</p>
-              <Button variant="outline" className="w-full bg-transparent">
-                Export All Data
+        {/* Danger zone */}
+        <div className="bg-card border border-destructive/30 rounded-xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-destructive/20">
+            <h3 className="text-sm font-semibold text-destructive">Danger zone</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Irreversible and destructive actions</p>
+          </div>
+          <div className="p-5 space-y-3">
+            <p className="text-sm text-muted-foreground">Sign out from all devices and end your current session.</p>
+            <form action="/auth/signout" method="post">
+              <Button type="submit" variant="destructive" size="sm" className="h-8 text-xs gap-1.5">
+                <LogOut className="w-3.5 h-3.5" />Sign out
               </Button>
-            </CardContent>
-          </Card>
-
-          <Separator className="bg-border/30" />
-
-          {/* Danger Zone */}
-          <Card className="border-destructive/50 bg-destructive/5 rounded-md">
-            <CardHeader>
-              <CardTitle className="text-lg text-destructive">Danger Zone</CardTitle>
-              <CardDescription>Irreversible actions</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <form
-                action="/auth/signout" 
-                method="post"
-                className="space-y-3"
-              >
-                <p className="text-sm text-muted-foreground">Sign out from all devices and end your current session.</p>
-                <Button
-                  type="submit"
-                  variant="destructive"
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sign Out
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

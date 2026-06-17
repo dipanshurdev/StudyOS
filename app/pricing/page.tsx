@@ -1,256 +1,220 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
-  CheckCircle2,
-  Sparkles,
-  ArrowLeft,
-  Zap,
-  Crown,
-  Building2,
+  CheckCircle2, Sparkles, ArrowLeft, Zap, Crown, Building2, ArrowRight,
 } from "lucide-react";
 import { enterpriseMailto, founderEmail, proMailto } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
+const FREE_FEATURES = [
+  "10 AI actions per day",
+  "Unlimited documents",
+  "Summaries & explanations",
+  "Practice questions",
+  "PDF import",
+  "Study analytics & streaks",
+  "Email support",
+];
 
+const PRO_FEATURES = [
+  "Unlimited AI actions",
+  "Advanced spaced repetition",
+  "AI-generated mind maps",
+  "AI tutor chat (unlimited)",
+  "Custom study plans",
+  "Export to PDF, DOCX, Markdown",
+  "Advanced analytics",
+  "Priority support",
+  "Early access to new features",
+];
+
+const ENT_FEATURES = [
+  "Everything in Pro",
+  "Team collaboration & sharing",
+  "Admin dashboard",
+  "Custom AI model configuration",
+  "SSO & SAML integration",
+  "Dedicated account manager",
+  "99.9% uptime SLA",
+  "Custom integrations & API",
+  "On-premise option",
+];
+
+const FAQS = [
+  { q: "Can I change plans anytime?", a: "Yes. Upgrade or downgrade instantly. Changes take effect immediately with no penalties." },
+  { q: "What happens to my data if I cancel?", a: "Your data stays safe for 30 days after cancellation. Export everything before you go." },
+  { q: "Do you offer student discounts?", a: "Yes — students with a valid .edu email get 50% off Pro. Contact us to verify." },
+  { q: "Is there a free trial for Pro?", a: "Payments are launching soon. Contact the founder for early access and manual onboarding." },
+  { q: "What payment methods do you accept?", a: "Payment options are being finalized. Reach out and we'll share available methods." },
+  { q: "Can I use StudyOS offline?", a: "AI features require internet. Offline note editing for Pro users is coming soon." },
+];
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-linear-to-b from-background via-background to-primary/5">
-      {/* Navigation */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-border/30">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-md bg-primary/10 p-1 border border-primary/20 shadow-sm transition-all group-hover:shadow-md group-hover:border-primary/30">
-            <img
-              src="/logo.png"
-              alt="StudyOS Logo"
-              className="w-full h-full object-contain"
-            />
+    <div className="min-h-screen bg-background">
+      {/* Background decoration */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-primary/6 blur-[120px]" />
+      </div>
+
+      {/* Nav */}
+      <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+              <img src="/logo.png" alt="StudyOS" className="w-4 h-4 object-contain" />
+            </div>
+            <span className="font-bold text-[15px] text-foreground tracking-tight">
+              Study<span className="text-primary">OS</span>
+            </span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/"><Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs"><ArrowLeft className="w-3.5 h-3.5" />Home</Button></Link>
+            <Link href="/login"><Button size="sm" className="h-8 text-xs">Sign in</Button></Link>
           </div>
-          <h2 className="text-xl font-black text-foreground tracking-tight">
-            Study<span className="text-primary">OS</span>
-          </h2>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link href="/">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button size="sm">Sign in</Button>
-          </Link>
         </div>
       </nav>
 
-      {/* Pricing Section */}
-      <section className="px-6 py-20 md:py-32 max-w-6xl mx-auto">
-        <div className="text-center mb-14 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <p className="text-sm font-semibold text-primary">
-              Simple, transparent pricing
-            </p>
+      <div className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-20">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/8 border border-primary/20 rounded-full">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <span className="text-xs font-semibold text-primary">Simple, transparent pricing</span>
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 tracking-tight">
-            Choose the plan that fits you
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+            The right plan for every student
           </h1>
-          <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            Start free. No hidden fees. Upgrade or cancel anytime—all plans
-            include our core AI tools.
+          <p className="text-muted-foreground max-w-lg mx-auto text-base">
+            Start free. No hidden fees. Upgrade when you need more — cancel anytime.
           </p>
-          <p className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
             <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-            No credit card required for Free
-          </p>
-          <p className="text-xs text-muted-foreground mt-2">
-            Payments are launching soon. For paid plans, contact founder directly.
-          </p>
+            No credit card required for Free plan
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {/* Free Plan */}
-          <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
-            <div className="flex items-center gap-2 mb-4">
-              <Zap className="w-5 h-5 text-muted-foreground" />
-              <h3 className="text-2xl font-bold text-foreground">Free</h3>
+        {/* Pricing cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          {/* Free */}
+          <div className="bg-card border border-border rounded-2xl p-7 space-y-6 hover:shadow-sm transition-shadow">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Zap className="w-4 h-4 text-muted-foreground" />
+                <h3 className="text-base font-semibold text-foreground">Free</h3>
+              </div>
+              <p className="text-xs text-muted-foreground">Try everything. No card required.</p>
             </div>
-            <p className="text-muted-foreground mb-6 text-sm">
-              Try everything. No card required.
-            </p>
-            <div className="mb-8">
-              <span className="text-5xl font-bold text-foreground">$0</span>
-              <span className="text-muted-foreground">/month</span>
+            <div>
+              <span className="text-4xl font-bold text-foreground">$0</span>
+              <span className="text-sm text-muted-foreground">/month</span>
             </div>
-
-            <ul className="space-y-4 mb-8">
-              {[
-                "10 AI actions per day",
-                "Unlimited documents",
-                "Basic summaries & explanations",
-                "Practice questions",
-                "PDF import",
-                "Study analytics",
-                "Study streaks",
-                "Email support",
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground">{item}</span>
+            <ul className="space-y-2.5">
+              {FREE_FEATURES.map((f, i) => (
+                <li key={i} className="flex items-center gap-2.5 text-sm text-foreground/80">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />{f}
                 </li>
               ))}
             </ul>
-
             <Link href="/login" className="block">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full h-10 text-sm font-medium">
                 Get started free
               </Button>
             </Link>
           </div>
 
-          {/* Pro Plan */}
-          <div className="bg-linear-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative hover:shadow-xl transition-shadow">
-            <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
-              Most Popular
+          {/* Pro — highlighted */}
+          <div className="bg-card border-2 border-primary/50 rounded-2xl p-7 space-y-6 relative shadow-lg shadow-primary/8">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+              <span className="bg-primary text-primary-foreground text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Most Popular
+              </span>
             </div>
-            <div className="flex items-center gap-2 mb-4">
-              <Crown className="w-5 h-5 text-primary" />
-              <h3 className="text-2xl font-bold text-foreground">Pro</h3>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className="w-4 h-4 text-primary" />
+                <h3 className="text-base font-semibold text-foreground">Pro</h3>
+              </div>
+              <p className="text-xs text-muted-foreground">For students who mean business.</p>
             </div>
-            <p className="text-muted-foreground mb-6 text-sm">
-              For students who mean business
-            </p>
-            <div className="mb-8">
-              <span className="text-5xl font-bold text-foreground">$9</span>
-              <span className="text-muted-foreground">/month</span>
+            <div>
+              <span className="text-4xl font-bold text-foreground">$9</span>
+              <span className="text-sm text-muted-foreground">/month</span>
             </div>
-
-            <ul className="space-y-4 mb-8">
-              {[
-                "Unlimited AI actions",
-                "Advanced flashcards with spaced repetition",
-                "AI-generated mind maps",
-                "AI tutor chat (unlimited)",
-                "Custom study plans",
-                "Export to PDF, DOCX, Markdown",
-                "Advanced analytics & insights",
-                "Priority support",
-                "Early access to new features",
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground font-medium">
-                    {item}
-                  </span>
+            <ul className="space-y-2.5">
+              {PRO_FEATURES.map((f, i) => (
+                <li key={i} className="flex items-center gap-2.5 text-sm text-foreground/80">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />{f}
                 </li>
               ))}
             </ul>
-
-            <Button asChild className="w-full">
-              <a href={proMailto}>Contact founder for Pro</a>
-            </Button>
-            <p className="text-xs text-muted-foreground text-center mt-3">
-              Payments are not live yet • Quick manual onboarding available
-            </p>
+            <div className="space-y-2">
+              <Button asChild className="w-full h-10 text-sm font-semibold">
+                <a href={proMailto}>Contact founder for Pro</a>
+              </Button>
+              <p className="text-center text-[11px] text-muted-foreground/60">
+                Payments launching soon · Manual onboarding available
+              </p>
+            </div>
           </div>
 
-          {/* Enterprise Plan */}
-          <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
-            <div className="flex items-center gap-2 mb-4">
-              <Building2 className="w-5 h-5 text-muted-foreground" />
-              <h3 className="text-2xl font-bold text-foreground">Enterprise</h3>
+          {/* Enterprise */}
+          <div className="bg-card border border-border rounded-2xl p-7 space-y-6 hover:shadow-sm transition-shadow">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Building2 className="w-4 h-4 text-muted-foreground" />
+                <h3 className="text-base font-semibold text-foreground">Enterprise</h3>
+              </div>
+              <p className="text-xs text-muted-foreground">For teams and institutions.</p>
             </div>
-            <p className="text-muted-foreground mb-6">
-              For teams & institutions
-            </p>
-            <div className="mb-8">
-              <span className="text-5xl font-bold text-foreground">Custom</span>
+            <div>
+              <span className="text-4xl font-bold text-foreground">Custom</span>
             </div>
-
-            <ul className="space-y-4 mb-8">
-              {[
-                "Everything in Pro",
-                "Team collaboration & sharing",
-                "Admin dashboard & analytics",
-                "Custom AI model training",
-                "SSO & advanced security",
-                "Dedicated account manager",
-                "SLA guarantee (99.9% uptime)",
-                "Custom integrations",
-                "On-premise deployment option",
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground">{item}</span>
+            <ul className="space-y-2.5">
+              {ENT_FEATURES.map((f, i) => (
+                <li key={i} className="flex items-center gap-2.5 text-sm text-foreground/80">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />{f}
                 </li>
               ))}
             </ul>
-
-            <Button asChild variant="outline" className="w-full">
-              <a href={enterpriseMailto}>Contact founder</a>
+            <Button asChild variant="outline" className="w-full h-10 text-sm font-medium">
+              <a href={enterpriseMailto}>Contact us</a>
             </Button>
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-20 border-t border-border/30 pt-16">
-          <h2 className="text-3xl font-bold text-foreground text-center mb-12">
-            Frequently asked questions
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                q: "Can I change plans later?",
-                a: "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.",
-              },
-              {
-                q: "What happens to my data if I cancel?",
-                a: "Your data remains safe. You can export everything before canceling, and we keep your data for 30 days after cancellation.",
-              },
-              {
-                q: "Do you offer student discounts?",
-                a: "Yes! Students with a valid .edu email get 50% off Pro plans. Contact support to verify your student status.",
-              },
-              {
-                q: "Is there a free trial for Pro?",
-                a: "Payments are launching soon. Contact founder for early access and onboarding details.",
-              },
-              {
-                q: "What payment methods do you accept?",
-                a: "Payment options are being finalized. Contact founder now and we will share the available method for your plan.",
-              },
-              {
-                q: "Can I use StudyOS offline?",
-                a: "Currently, StudyOS requires an internet connection for AI features. Offline mode is coming soon for Pro users.",
-              },
-            ].map((faq, idx) => (
-              <div key={idx} className="space-y-2">
-                <h3 className="font-semibold text-foreground">{faq.q}</h3>
-                <p className="text-sm text-muted-foreground">{faq.a}</p>
+        {/* FAQ */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-foreground tracking-tight mb-2">Frequently asked questions</h2>
+            <p className="text-sm text-muted-foreground">Everything you need to know before getting started.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+            {FAQS.map(({ q, a }, i) => (
+              <div key={i} className="space-y-1.5">
+                <h3 className="text-sm font-semibold text-foreground">{q}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* CTA */}
-        <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
-            Still have questions?
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Our team is here to help you succeed.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="outline">
-              <a href={`mailto:${founderEmail}?subject=StudyOS%20Pricing%20Question`}>
-                Contact founder
-              </a>
+        <div className="text-center bg-card border border-border rounded-2xl p-10 space-y-4">
+          <h2 className="text-2xl font-bold text-foreground">Still have questions?</h2>
+          <p className="text-sm text-muted-foreground">Our team is here to help you get started.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild variant="outline" className="h-10 text-sm gap-1.5">
+              <a href={`mailto:${founderEmail}?subject=StudyOS%20Pricing%20Question`}>Contact founder</a>
             </Button>
             <Link href="/login">
-              <Button>Start free trial</Button>
+              <Button className="h-10 text-sm gap-1.5">
+                Start free <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
             </Link>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
