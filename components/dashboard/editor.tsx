@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUsageLimit } from "@/hooks/use-usage-limit";
 import { cn } from "@/lib/utils";
+import { MindMap } from "./mind-map";
 
 interface EditorProps {
   initialDocument: any;
@@ -216,7 +217,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
       <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf" className="hidden" />
 
       {/* ── Top Toolbar ──────────────────────────────────────── */}
-      <div className="h-11 border-b border-border/60 px-4 flex items-center justify-between bg-card/80 backdrop-blur-sm shrink-0">
+      <div className="h-11 border-b border-border px-4 flex items-center justify-between bg-card shrink-0">
         <div className="flex items-center gap-2">
           {!isFullscreen && (
             <Link href="/dashboard">
@@ -228,15 +229,15 @@ export function Editor({ initialDocument, userId }: EditorProps) {
           <div className="h-4 w-px bg-border mx-1" />
           {/* Save status */}
           {isSaving ? (
-            <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
               <Loader2 className="w-3 h-3 animate-spin" />Saving…
             </span>
           ) : saved ? (
-            <span className="flex items-center gap-1.5 text-[11px] text-emerald-500">
+            <span className="flex items-center gap-1.5 text-[11px] font-mono text-foreground">
               <Check className="w-3 h-3" />Saved
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground/50">
+            <span className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground/50">
               <Clock className="w-3 h-3" />All changes saved
             </span>
           )}
@@ -274,7 +275,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
               spellCheck={false}
             />
             {/* Content area */}
-            <div className="flex-1 relative flex flex-col rounded-xl border border-border focus-within:border-ring/50 transition-colors bg-card overflow-hidden">
+            <div className="flex-1 relative flex flex-col rounded-none border border-border focus-within:border-ring/50 transition-colors bg-card overflow-hidden">
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -300,62 +301,44 @@ export function Editor({ initialDocument, userId }: EditorProps) {
           <div className="px-4 pt-4 pb-3 border-b border-border/60 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
+                <div className="w-6 h-6 rounded-none bg-primary/10 flex items-center justify-center">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
                 </div>
                 <span className="text-sm font-semibold text-foreground">AI Assistant</span>
               </div>
               <div className="flex items-center gap-1.5">
                 {/* Usage indicator */}
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-[10px] font-medium text-muted-foreground">
-                  <div className={cn("w-1.5 h-1.5 rounded-full", usagePct >= 90 ? "bg-red-500" : usagePct >= 70 ? "bg-amber-500" : "bg-emerald-500")} />
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground">
+                  <div className={cn("w-1.5 h-1.5 rounded-full", usagePct >= 90 ? "bg-destructive" : "bg-primary")} />
                   {limit - usage} left
                 </div>
               </div>
             </div>
 
-            {/* Action tabs — 2 rows */}
-            <div className="space-y-1">
-              <div className="grid grid-cols-3 gap-1">
-                {AI_ACTIONS.slice(0, 3).map((action) => {
-                  const Icon = action.icon;
-                  const active = selectedAction === action.value;
-                  return (
-                    <button
-                      key={action.value}
-                      onClick={() => { setSelectedAction(action.value); setAiOutput(""); }}
-                      className={cn(
-                        "flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-[11px] font-semibold transition-all duration-150",
-                        active
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                      )}
-                    >
-                      <Icon className="w-3 h-3 shrink-0" />{action.label}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="grid grid-cols-3 gap-1">
-                {AI_ACTIONS.slice(3).map((action) => {
-                  const Icon = action.icon;
-                  const active = selectedAction === action.value;
-                  return (
-                    <button
-                      key={action.value}
-                      onClick={() => { setSelectedAction(action.value); setAiOutput(""); if (action.value !== "chat") setChatMessages([]); }}
-                      className={cn(
-                        "flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-[11px] font-semibold transition-all duration-150",
-                        active
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                      )}
-                    >
-                      <Icon className="w-3 h-3 shrink-0" />{action.label}
-                    </button>
-                  );
-                })}
-              </div>
+            {/* Action selector — segmented control */}
+            <div className="grid grid-cols-3 gap-1 p-1 rounded-none border border-border bg-muted/40">
+              {AI_ACTIONS.map((action) => {
+                const Icon = action.icon;
+                const active = selectedAction === action.value;
+                return (
+                  <button
+                    key={action.value}
+                    onClick={() => {
+                      setSelectedAction(action.value);
+                      setAiOutput("");
+                      if (action.value !== "chat") setChatMessages([]);
+                    }}
+                    className={cn(
+                      "flex items-center justify-center gap-1 px-2 py-1.5 rounded-none text-[11px] font-medium transition-colors",
+                      active
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-background"
+                    )}
+                  >
+                    <Icon className="w-3 h-3 shrink-0" />{action.label}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Generate button */}
@@ -363,7 +346,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
               <Button
                 onClick={handleAiAction}
                 disabled={isGenerating || !content.trim()}
-                className="w-full h-9 text-xs font-semibold gap-1.5 shadow-sm"
+                className="w-full h-9 text-xs font-semibold gap-1.5"
               >
                 {isGenerating ? (
                   <><Loader2 className="w-3.5 h-3.5 animate-spin" />Generating…</>
@@ -382,18 +365,33 @@ export function Editor({ initialDocument, userId }: EditorProps) {
               <div className="flex-1 flex flex-col overflow-hidden">
                 <div className="flex-1 overflow-auto p-3 space-y-3">
                   {chatMessages.length === 0 && !isGenerating && (
-                    <div className="h-full flex flex-col items-center justify-center text-center py-10 opacity-50">
-                      <MessageSquare className="w-8 h-8 mb-3 text-muted-foreground" />
+                    <div className="h-full flex flex-col items-center justify-center text-center py-10">
+                      <MessageSquare className="w-8 h-8 mb-3 text-muted-foreground/60" />
                       <p className="text-sm font-medium text-foreground">Ask your AI Tutor</p>
-                      <p className="text-xs text-muted-foreground mt-1 max-w-[200px]">
+                      <p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
                         Ask anything about your study material
                       </p>
+                      <div className="mt-4 flex flex-col gap-1.5 w-full max-w-[240px]">
+                        {[
+                          "Summarize the key ideas",
+                          "Quiz me on this topic",
+                          "Explain this simply",
+                        ].map((prompt) => (
+                          <button
+                            key={prompt}
+                            onClick={() => setChatInput(prompt)}
+                            className="text-left text-xs px-3 py-2 rounded-none border border-border bg-card text-foreground/80 hover:border-foreground/20 hover:text-foreground transition-colors"
+                          >
+                            {prompt}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                   {chatMessages.map((msg, idx) => (
                     <div key={idx} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                       <div className={cn(
-                        "max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed",
+                        "max-w-[85%] rounded-none px-3 py-2 text-xs leading-relaxed",
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground rounded-br-sm"
                           : "bg-muted text-foreground rounded-bl-sm"
@@ -406,7 +404,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                   ))}
                   {isGenerating && (
                     <div className="flex justify-start">
-                      <div className="bg-muted rounded-xl rounded-bl-sm px-3 py-2.5 flex gap-1.5">
+                      <div className="bg-muted rounded-none rounded-bl-sm px-3 py-2.5 flex gap-1.5">
                         <span className="typing-dot w-1.5 h-1.5 bg-muted-foreground/60 rounded-full inline-block" />
                         <span className="typing-dot w-1.5 h-1.5 bg-muted-foreground/60 rounded-full inline-block" />
                         <span className="typing-dot w-1.5 h-1.5 bg-muted-foreground/60 rounded-full inline-block" />
@@ -452,7 +450,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                 {/* Card */}
                 <div
                   onClick={() => setFlashcardFlipped(!flashcardFlipped)}
-                  className="flex-1 min-h-[180px] bg-background border-2 border-border rounded-xl p-5 flex flex-col items-center justify-center cursor-pointer hover:border-primary/40 transition-colors group"
+                  className="flex-1 min-h-[180px] bg-card border border-border rounded-none p-5 flex flex-col items-center justify-center cursor-pointer hover:border-foreground/20 transition-colors group"
                 >
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-3">
                     {flashcardFlipped ? "Answer" : "Question"} · click to flip
@@ -467,13 +465,13 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                 <div className="mt-3 space-y-2">
                   {flashcardFlipped ? (
                     <div className="grid grid-cols-3 gap-1.5">
-                      <Button variant="outline" size="sm" onClick={() => handleFlashcardReview(1)} className="h-8 text-xs gap-1 border-red-200 dark:border-red-900 text-red-500 hover:bg-red-50 dark:hover:bg-red-950">
+                      <Button variant="outline" size="sm" onClick={() => handleFlashcardReview(1)} className="h-8 text-xs gap-1 text-muted-foreground">
                         <ThumbsDown className="w-3 h-3" />Hard
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleFlashcardReview(3)} className="h-8 text-xs gap-1 border-amber-200 dark:border-amber-900 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950">
+                      <Button variant="outline" size="sm" onClick={() => handleFlashcardReview(3)} className="h-8 text-xs gap-1 text-foreground">
                         <Minus className="w-3 h-3" />Good
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleFlashcardReview(5)} className="h-8 text-xs gap-1 border-emerald-200 dark:border-emerald-900 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950">
+                      <Button variant="outline" size="sm" onClick={() => handleFlashcardReview(5)} className="h-8 text-xs gap-1 border-primary/40 text-primary hover:bg-primary/5">
                         <ThumbsUp className="w-3 h-3" />Easy
                       </Button>
                     </div>
@@ -487,11 +485,16 @@ export function Editor({ initialDocument, userId }: EditorProps) {
 
             ) : /* ── EMPTY STATE ── */
             !aiOutput && !isGenerating ? (
-              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center opacity-40">
-                <Brain className="w-10 h-10 mb-3 text-muted-foreground" />
+              <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                <Brain className="w-10 h-10 mb-3 text-muted-foreground/50" />
                 <p className="text-sm font-medium text-foreground mb-1">Ready to assist</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed max-w-[220px]">
                   {AI_ACTIONS.find(a => a.value === selectedAction)?.description}
+                </p>
+                <p className="mt-4 text-[11px] text-muted-foreground/60 inline-flex items-center gap-1.5">
+                  Press
+                  <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded border border-border bg-muted">Generate</kbd>
+                  to start
                 </p>
               </div>
 
@@ -499,7 +502,7 @@ export function Editor({ initialDocument, userId }: EditorProps) {
             isGenerating ? (
               <div className="flex-1 p-5 space-y-3">
                 {[80, 100, 65, 90, 55, 75].map((w, i) => (
-                  <div key={i} className="h-3 bg-muted rounded-full animate-pulse" style={{ width: `${w}%`, animationDelay: `${i * 80}ms` }} />
+                  <div key={i} className="h-3 rounded-full shimmer" style={{ width: `${w}%` }} />
                 ))}
               </div>
 
@@ -523,9 +526,13 @@ export function Editor({ initialDocument, userId }: EditorProps) {
                   </div>
                 </div>
                 <div className="flex-1 overflow-auto p-4">
-                  <div className="prose-ai">
-                    <ReactMarkdown>{aiOutput}</ReactMarkdown>
-                  </div>
+                  {selectedAction === "mindmap" ? (
+                    <MindMap source={aiOutput} />
+                  ) : (
+                    <div className="prose-ai">
+                      <ReactMarkdown>{aiOutput}</ReactMarkdown>
+                    </div>
+                  )}
                 </div>
                 <div className="px-4 py-2 border-t border-border/40 bg-muted/20 shrink-0">
                   <p className="text-[10px] text-muted-foreground/50 text-center">

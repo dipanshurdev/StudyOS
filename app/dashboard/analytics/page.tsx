@@ -8,11 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  TrendingUp,
   Zap,
   FileText,
   Target,
-  Brain,
   ArrowLeft,
   Info,
   Sparkles,
@@ -62,17 +60,17 @@ export default async function AnalyticsPage() {
     {
       name: "Summarize",
       count: actionCounts.summarize,
-      fill: "oklch(0.65 0.18 200)",
+      fill: "var(--chart-1)",
     },
     {
       name: "Explain",
       count: actionCounts.explain,
-      fill: "oklch(0.75 0.15 150)",
+      fill: "var(--chart-2)",
     },
     {
       name: "Practice",
       count: actionCounts.questions,
-      fill: "oklch(0.85 0.12 90)",
+      fill: "var(--chart-3)",
     },
   ];
 
@@ -108,12 +106,8 @@ export default async function AnalyticsPage() {
 
   return (
     <div className="relative min-h-screen bg-background">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl dark:bg-primary/20" />
-        <div className="absolute -right-24 bottom-20 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/20" />
-      </div>
       {/* Analytics Header */}
-      <div className="border-b border-border/60 bg-card/80 backdrop-blur-xl sticky top-0 z-50">
+      <div className="border-b border-border bg-background sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/dashboard">
@@ -131,13 +125,13 @@ export default async function AnalyticsPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button
+            {/* <Button
               variant="outline"
               size="sm"
               className="h-7 text-xs"
             >
               Export Report
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
@@ -146,9 +140,9 @@ export default async function AnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
           <div className="lg:col-span-3">
             <div className="mb-10">
-                    <h2 className="text-3xl md:text-4xl font-black text-foreground tracking-tighter mb-4">
+                    <h2 className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight mb-4">
                 Everything you've{" "}
-                <span className="text-primary italic">learned.</span>
+                <span className="text-primary">learned.</span>
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
                 You've processed{" "}
@@ -163,73 +157,59 @@ export default async function AnalyticsPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="bg-card border border-border rounded-none grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
               {[
                 {
                   label: "Total Materials",
                   value: stats.totalDocuments,
                   icon: FileText,
-                  color: "text-blue-500",
-                  bg: "bg-blue-500/10",
+                  primary: false,
                 },
                 {
                   label: "AI Actions",
                   value: stats.totalActionsUsed,
                   icon: Zap,
-                  color: "text-amber-500",
-                  bg: "bg-amber-500/10",
+                  primary: true,
                 },
                 {
                   label: "Study Streak",
                   value: `${stats.studyStreak}d`,
                   icon: Target,
-                  color: "text-emerald-500",
-                  bg: "bg-emerald-500/10",
+                  primary: false,
                   subValue: `Longest: ${stats.longestStreak || 0}d`,
                 },
               ].map((stat, i) => (
-                <Card
-                  key={i}
-                  className="border-border/50 bg-card/40 backdrop-blur-sm shadow-sm overflow-hidden relative group"
-                >
-                  <div
-                    className={`absolute top-0 left-0 w-1 h-full ${stat.color.replace("text", "bg")} transition-all group-hover:w-2`}
-                  ></div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`p-3 rounded-md ${stat.bg} ${stat.color}`}
-                      >
-                        <stat.icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                          {stat.label}
-                        </p>
-                        <p className="text-2xl font-black text-foreground">
-                          {stat.value}
-                        </p>
-                        {stat.subValue && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {stat.subValue}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div key={i} className="p-6 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
+                      {stat.label}
+                    </p>
+                    <stat.icon
+                      className={`w-4 h-4 ${stat.primary ? "text-primary" : "text-muted-foreground"}`}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-mono font-semibold text-foreground tabular-nums">
+                      {stat.value}
+                    </p>
+                    {stat.subValue && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {stat.subValue}
+                      </p>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
           <div className="lg:col-span-1">
-            <Card className="h-full border-primary/20 bg-linear-to-br from-primary/10 to-card backdrop-blur-sm relative overflow-hidden group shadow-sm">
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
+            <Card className="h-full border-border bg-card relative overflow-hidden shadow-xs">
               <CardContent className="p-8 flex flex-col items-center text-center justify-center h-full">
-                <div className="w-16 h-16 rounded-2xl bg-primary shadow-lg shadow-primary/30 flex items-center justify-center mb-6 text-primary-foreground transform group-hover:rotate-6 transition-transform">
-                  <Sparkles className="w-8 h-8" />
+                <div className="w-12 h-12 rounded-none bg-muted border border-border flex items-center justify-center mb-6 text-primary">
+                  <Sparkles className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-xl mb-3">Today's Usage</h3>
+                <h3 className="font-semibold text-base mb-4">Today's Usage</h3>
                 <div className="relative w-32 h-32 flex items-center justify-center mb-4">
                   <svg className="w-full h-full transform -rotate-90">
                     <circle
@@ -257,10 +237,10 @@ export default async function AnalyticsPage() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-3xl font-black">
+                    <span className="text-3xl font-mono font-semibold tabular-nums">
                       {stats.actionsToday}
                     </span>
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase">
                       Limit {userData?.plan_type === "pro" ? 100 : 10}
                     </span>
                   </div>
@@ -276,20 +256,20 @@ export default async function AnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Card className="lg:col-span-2 border-border/50 bg-card/40 backdrop-blur-sm rounded-3xl overflow-hidden">
+          <Card className="lg:col-span-2 border-border bg-card rounded-none overflow-hidden">
             <CardHeader className="p-8 pb-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-2xl font-black tracking-tight">
+                  <CardTitle className="text-lg font-semibold tracking-tight">
                     Weekly Activity
                   </CardTitle>
-                  <CardDescription className="text-sm font-medium">
+                  <CardDescription className="text-sm">
                     Daily AI interaction frequency
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-sm bg-muted/50 border border-border/50 text-[10px] font-bold uppercase tracking-wider">
-                    <div className="w-2 h-2 rounded-full bg-primary ring-2 ring-primary/20 animate-pulse"></div>
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-muted border border-border text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
                     Last 7 Days
                   </div>
                 </div>
@@ -300,13 +280,13 @@ export default async function AnalyticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-border/50 bg-card/40 backdrop-blur-sm rounded-3xl overflow-hidden flex flex-col">
+          <Card className="border-border bg-card rounded-none overflow-hidden flex flex-col">
             <CardHeader className="p-8 pb-0 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-2xl font-black tracking-tight">
+                <CardTitle className="text-lg font-semibold tracking-tight">
                   Action Type
                 </CardTitle>
-                <CardDescription className="text-sm font-medium">
+                <CardDescription className="text-sm">
                   Breakdown of AI usage
                 </CardDescription>
               </div>
@@ -325,13 +305,9 @@ export default async function AnalyticsPage() {
         </div>
 
         {/* Learning Tips Section */}
-        <div className="mt-12 p-1 bg-linear-to-tr from-primary/20 via-border/20 to-accent/20 rounded-[2.5rem]">
-          <div className="bg-card rounded-[2.4rem] p-10 md:p-12 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-12 opacity-[0.03] group-hover:scale-110 transition-transform duration-1000">
-              <Brain className="w-64 h-64" />
-            </div>
+        <div className="mt-12 bg-card border border-border rounded-none p-10 md:p-12 relative overflow-hidden">
             <div className="max-w-2xl relative">
-              <h3 className="text-3xl font-black text-foreground mb-6">
+              <h3 className="text-lg font-semibold text-foreground mb-6">
                 Optimization Insights
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -354,7 +330,7 @@ export default async function AnalyticsPage() {
                   },
                 ].map((insight, i) => (
                   <div key={i} className="space-y-2">
-                    <h4 className="font-bold text-foreground flex items-center gap-2">
+                    <h4 className="font-semibold text-foreground flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
                       {insight.title}
                     </h4>
@@ -365,7 +341,6 @@ export default async function AnalyticsPage() {
                 ))}
               </div>
             </div>
-          </div>
         </div>
       </main>
     </div>

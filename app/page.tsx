@@ -5,22 +5,17 @@ import { LandingThemeToggle } from "@/components/landing/theme-toggle";
 import {
   CheckCircle2,
   Zap,
-  Brain,
   BarChart3,
   ChevronRight,
   Sparkles,
-  BookOpen,
-  Users,
-  Target,
-  Clock,
   ArrowRight,
-  Star,
-  TrendingUp,
+  Layers,
+  ListChecks,
+  GitBranch,
+  MessageSquare,
   Shield,
-  Globe,
   LayoutDashboard,
   LogOut,
-  Play,
   Linkedin,
   Twitter,
   Quote,
@@ -42,22 +37,17 @@ export default async function LandingPage() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="relative isolate min-h-screen bg-linear-to-b from-background via-background to-primary/5">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-1/2 top-0 h-104 w-104 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl dark:bg-primary/20" />
-        <div className="absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-500/20" />
-        <div className="absolute -right-20 bottom-1/4 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl dark:bg-indigo-500/20" />
-      </div>
+    <div className="relative isolate min-h-screen bg-background">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:shadow-md"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:rounded-none focus:bg-background focus:px-3 focus:py-2 focus:shadow-md"
       >
         Skip to content
       </a>
       {/* Navigation - sticky SaaS-style */}
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-3 max-w-7xl mx-auto border-b border-border/30 bg-background/80 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-3 max-w-7xl mx-auto border-b border-border  backdrop-blur-xl bg-transparent">
         <div className="flex items-center gap-2.5 group">
-          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-md bg-primary/10 p-1 border border-primary/20 shadow-sm transition-all group-hover:shadow-md group-hover:border-primary/30">
+          <div className="relative w-9 h-9 flex items-center justify-center overflow-hidden rounded-none bg-muted p-1 border border-border transition-colors group-hover:border-foreground/20">
             <Image
               src="/logo.png"
               alt="StudyOS Logo"
@@ -67,7 +57,7 @@ export default async function LandingPage() {
               className="w-full h-full object-contain"
             />
           </div>
-          <h2 className="text-xl font-black text-foreground tracking-tight">
+          <h2 className="text-xl font-semibold text-foreground tracking-tight">
             Study<span className="text-primary">OS</span>
           </h2>
         </div>
@@ -91,7 +81,7 @@ export default async function LandingPage() {
           {user ? (
             <>
               <Link href="/dashboard">
-                <Button size="sm" className="gap-2 shadow-sm">
+                <Button size="sm" className="gap-2">
                   <LayoutDashboard className="w-4 h-4" />
                   Dashboard
                 </Button>
@@ -111,7 +101,7 @@ export default async function LandingPage() {
                 </Button>
               </Link>
               <Link href="/login">
-                <Button size="sm" className="gap-2 shadow-sm">
+                <Button size="sm" className="gap-2">
                   Get started free
                   <ChevronRight className="w-4 h-4" />
                 </Button>
@@ -125,23 +115,23 @@ export default async function LandingPage() {
       {/* Hero Section */}
     <Hero user={user} />
 
-      {/* Trusted by Students and Teams */}
-      <section className="px-6 py-10 md:py-14 border-t border-border/30">
+      {/* Who it's for */}
+      <section className="px-6 py-10 md:py-14 bg-secondary">
         <div className="max-w-7xl mx-auto">
           <p className="text-center text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider mb-6">
-            Trusted by learners from top institutions
+            Built for every kind of studying
           </p>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
             {[
-              "University Programs",
-              "Medical Aspirants",
-              "Engineering Batches",
-              "MBA Cohorts",
-              "Bootcamp Teams",
+              "University courses",
+              "Medical & NEET prep",
+              "Engineering exams",
+              "MBA & GMAT",
+              "Bootcamp cohorts",
             ].map((item) => (
               <div
                 key={item}
-                className="rounded-md border border-border/50 bg-card/60 px-4 py-3 text-center text-sm font-medium text-foreground/80 backdrop-blur-sm"
+                className="rounded-full border border-border bg-card px-4 py-3 text-center text-sm font-medium text-foreground/80"
               >
                 {item}
               </div>
@@ -153,18 +143,18 @@ export default async function LandingPage() {
       {/* Demo Video */}
       <section
         id="demo"
-        className="px-6 py-16 md:py-24 border-t border-border/30 scroll-mt-20"
+        className="px-6 py-16 md:py-24 scroll-mt-20"
       >
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 md:mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2 tracking-tight">
+            <h2 className="tracking-display text-3xl md:text-4xl font-semibold text-foreground mb-2">
               See StudyOS in action
             </h2>
-            <p className="text-muted-foreground text-sm md:text-base">
+            <p className="text-muted-foreground text-base">
               Watch how to turn your notes into summaries, flashcards, and more
             </p>
           </div>
-          <div className="relative w-full rounded-2xl overflow-hidden border border-border/50 shadow-xl bg-muted/30 aspect-video">
+          <div className="product-shadow relative w-full rounded-[18px] overflow-hidden border border-border bg-card aspect-video">
             <iframe
               src="https://www.youtube.com/embed/r7Fy3arW7fI?rel=0&modestbranding=1"
               title="StudyOS - Demo video"
@@ -189,7 +179,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Live on Peerlist Launchpad */}
-      <section className="px-6 py-12 md:py-16 border-t border-border/30">
+      <section className="px-6 py-12 md:py-16 bg-secondary">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
             As seen on
@@ -198,13 +188,13 @@ export default async function LandingPage() {
             href="https://peerlist.io/launchpad"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md transition-opacity hover:opacity-90"
+            className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-none transition-opacity hover:opacity-90"
             aria-label="StudyOS on Peerlist Launchpad"
           >
             <Image
               src="/peerlist-launchpad.png"
               alt="StudyOS - Study Smarter with AI. Live on Peerlist Launchpad."
-              className="w-full max-w-2xl mx-auto rounded-md border border-border/50 shadow-lg object-contain"
+              className="product-shadow w-full max-w-2xl mx-auto rounded-[18px] border border-border/50 object-contain"
               width={672}
               height={280}
             />
@@ -215,106 +205,115 @@ export default async function LandingPage() {
       {/* Features Section */}
       <section
         id="features"
-        className="px-6 py-20 md:py-32 bg-card/30 border-t border-border/30 scroll-mt-20"
+        className="px-6 py-20 md:py-32 scroll-mt-20"
       >
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14 md:mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 tracking-tight">
-              Built for the way you actually study
+          <div className="max-w-2xl mb-12 md:mb-16">
+            <p className="text-xs font-medium uppercase tracking-wider text-primary mb-3">
+              Everything in one workspace
+            </p>
+            <h2 className="tracking-display text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-4">
+              Six tools that work on the{" "}
+              <span className="text-primary">same document</span>
             </h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              One platform. All the tools. No context switching—just better
-              outcomes.
+            <p className="text-base md:text-lg text-muted-foreground">
+              Import once, then summarize, drill, and review from a single
+              source of truth. No re-uploading, no context switching.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-16">
+          {/* Two lead capabilities with inline product visuals */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 mb-4 md:mb-5">
+            {/* AI summaries */}
+            <div className="group rounded-none border border-border bg-card p-6 md:p-8 hover:border-foreground/20 transition-colors">
+              <div className="flex items-center gap-2.5 mb-4">
+                <span className="inline-flex size-9 items-center justify-center rounded-none bg-primary/10 text-primary">
+                  <Sparkles className="size-4.5" />
+                </span>
+                <h3 className="text-lg font-semibold text-foreground">
+                  AI summaries
+                </h3>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                Condense chapters and papers into exam-focused notes. Every
+                point traces back to a line in your source.
+              </p>
+              <div className="rounded-none border border-border bg-muted/40 p-4 space-y-2.5">
+                {[
+                  "Photosynthesis converts light into chemical energy.",
+                  "Light reactions occur in the thylakoid membrane.",
+                  "The Calvin cycle fixes CO\u2082 into glucose.",
+                ].map((line) => (
+                  <div key={line} className="flex gap-2 text-sm text-foreground/90">
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <span>{line}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* AI tutor chat */}
+            <div className="group rounded-none border border-border bg-card p-6 md:p-8 hover:border-foreground/20 transition-colors">
+              <div className="flex items-center gap-2.5 mb-4">
+                <span className="inline-flex size-9 items-center justify-center rounded-none bg-primary/10 text-primary">
+                  <MessageSquare className="size-4.5" />
+                </span>
+                <h3 className="text-lg font-semibold text-foreground">
+                  AI tutor chat
+                </h3>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                Stuck on a concept? Ask in plain English and get grounded
+                explanations, examples, and follow-up questions.
+              </p>
+              <div className="space-y-2.5">
+                <div className="ml-auto max-w-[80%] rounded-none rounded-br-sm bg-primary px-3.5 py-2 text-sm text-primary-foreground">
+                  Explain the Calvin cycle simply.
+                </div>
+                <div className="max-w-[85%] rounded-none rounded-bl-sm border border-border bg-muted/40 px-3.5 py-2 text-sm text-foreground/90">
+                  It&rsquo;s the &ldquo;sugar factory&rdquo; of photosynthesis&mdash;using energy
+                  from light reactions to turn CO₂ into glucose.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hairline-divided grid of remaining tools */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px overflow-hidden rounded-none border border-border bg-border">
             {[
-              {
-                title: "AI summaries",
-                description:
-                  "Condense chapters and papers into exam-focused summaries. No more highlighting for hours.",
-                icon: Zap,
-                color: "text-amber-500",
-                bg: "bg-amber-500/10",
-              },
               {
                 title: "Smart flashcards",
                 description:
-                  "Generate cards from your content. Spaced repetition tells you exactly when to review.",
-                icon: Brain,
-                color: "text-blue-500",
-                bg: "bg-blue-500/10",
+                  "Auto-generated cards with spaced repetition that tells you exactly when to review.",
+                icon: Layers,
               },
               {
                 title: "Practice questions",
                 description:
-                  "Get questions that match your material. MCQ, short-answer, and essay-style.",
-                icon: Target,
-                color: "text-emerald-500",
-                bg: "bg-emerald-500/10",
+                  "MCQ, short-answer, and essay prompts matched to your own material.",
+                icon: ListChecks,
               },
               {
                 title: "Mind maps",
                 description:
-                  "Turn dense topics into visual maps. See connections and structure at a glance.",
-                icon: Globe,
-                color: "text-purple-500",
-                bg: "bg-purple-500/10",
-              },
-              {
-                title: "AI tutor chat",
-                description:
-                  "Stuck on a concept? Ask in plain English. Get explanations, examples, and follow-ups.",
-                icon: Users,
-                color: "text-pink-500",
-                bg: "bg-pink-500/10",
+                  "Turn dense topics into visual maps and see structure at a glance.",
+                icon: GitBranch,
               },
               {
                 title: "Study analytics",
                 description:
-                  "Streaks, usage, and progress in one place. Know where you stand and what to do next.",
-                icon: TrendingUp,
-                color: "text-orange-500",
-                bg: "bg-orange-500/10",
+                  "Streaks, usage, and progress in one place so you know what to do next.",
+                icon: BarChart3,
               },
-              {
-                title: "PDF import",
-                description:
-                  "Drop in textbooks and lecture slides. We extract the content so you can study it.",
-                icon: BookOpen,
-                color: "text-cyan-500",
-                bg: "bg-cyan-500/10",
-              },
-              {
-                title: "Study plans",
-                description:
-                  "Set your exam date and goals. Get a realistic schedule that adapts to your pace.",
-                icon: Clock,
-                color: "text-indigo-500",
-                bg: "bg-indigo-500/10",
-              },
-              {
-                title: "Sharing & collaboration",
-                description:
-                  "Share docs with study groups. One source of truth, fewer last-minute scrambles.",
-                icon: Shield,
-                color: "text-red-500",
-                bg: "bg-red-500/10",
-              },
-            ].map((feature, idx) => {
+            ].map((feature) => {
               const Icon = feature.icon;
               return (
                 <div
-                  key={idx}
-                  className="bg-background border border-border/50 rounded-md p-5 md:p-6 hover:border-primary/40 hover:shadow-md transition-all duration-200 group"
+                  key={feature.title}
+                  className="group bg-card p-6 hover:bg-accent/40 transition-colors"
                 >
-                  <div
-                    className={`w-11 h-11 ${feature.bg} rounded-sm flex items-center justify-center mb-3 group-hover:scale-105 transition-transform shrink-0`}
-                  >
-                    <Icon className={`w-5 h-5 ${feature.color}`} />
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground mb-1.5">
+                  <Icon className="size-5 text-muted-foreground group-hover:text-primary transition-colors mb-3" />
+                  <h3 className="text-sm font-semibold text-foreground mb-1.5">
                     {feature.title}
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
@@ -328,9 +327,10 @@ export default async function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="px-6 py-20 md:py-32 max-w-7xl mx-auto">
+      <section className="bg-secondary px-6 py-20 md:py-32">
+        <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 tracking-tight">
+          <h2 className="tracking-display text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-3">
             From notes to exam-ready in three steps
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -363,7 +363,7 @@ export default async function LandingPage() {
               key={idx}
               className="text-center space-y-4 relative md:last:before:hidden md:last:after:hidden"
             >
-              <div className="w-14 h-14 bg-primary/10 border-2 border-primary/20 rounded-md flex items-center justify-center mx-auto text-xl font-bold text-primary">
+              <div className="w-14 h-14 bg-card border border-border rounded-none flex items-center justify-center mx-auto text-xl font-semibold text-foreground">
                 {item.step}
               </div>
               <h3 className="text-lg md:text-xl font-semibold text-foreground">
@@ -375,13 +375,14 @@ export default async function LandingPage() {
             </div>
           ))}
         </div>
+        </div>
       </section>
 
       {/* Pricing Preview */}
-      <section className="px-6 py-20 md:py-32 bg-card/30 border-t border-border/30">
+      <section className="px-6 py-20 md:py-32 bg-background">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14 md:mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 tracking-tight">
+            <h2 className="tracking-display text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-3">
               Pricing that scales with you
             </h2>
             <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
@@ -392,7 +393,7 @@ export default async function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {/* Free Plan */}
-          <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
+          <div className="bg-card border border-border rounded-none p-8 hover:border-foreground/20 transition-colors">
             <div className="flex items-center gap-2 mb-4">
               <Zap className="w-5 h-5 text-muted-foreground" />
               <h3 className="text-2xl font-bold text-foreground">Free</h3>
@@ -431,7 +432,7 @@ export default async function LandingPage() {
           </div>
 
           {/* Pro Plan */}
-          <div className="bg-linear-to-br from-primary/10 to-background border-2 border-primary/50 rounded-2xl p-8 relative hover:shadow-xl transition-shadow">
+          <div className="bg-card border border-primary/60 rounded-none p-8 relative">
             <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
               Most Popular
             </div>
@@ -477,7 +478,7 @@ export default async function LandingPage() {
           </div>
 
           {/* Enterprise Plan */}
-          <div className="bg-background border border-border rounded-2xl p-8 hover:shadow-lg transition-shadow">
+          <div className="bg-card border border-border rounded-none p-8 hover:border-foreground/20 transition-colors">
             <div className="flex items-center gap-2 mb-4">
               <Building2 className="w-5 h-5 text-muted-foreground" />
               <h3 className="text-2xl font-bold text-foreground">Enterprise</h3>
@@ -519,11 +520,11 @@ export default async function LandingPage() {
       {/* Testimonials */}
       <section
         id="testimonials"
-        className="px-6 py-20 md:py-28 border-t border-border/30"
+        className="px-6 py-20 md:py-28 bg-secondary"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-3">
+            <h2 className="tracking-display text-3xl md:text-4xl font-semibold text-foreground mb-3">
               Why students keep using StudyOS
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -555,9 +556,9 @@ export default async function LandingPage() {
             ].map((item) => (
               <article
                 key={item.name}
-                className="rounded-2xl border border-border/50 bg-card/70 p-6 backdrop-blur-sm hover:border-primary/30 transition-colors"
+                className="rounded-none border border-border bg-card p-6 hover:border-foreground/20 transition-colors"
               >
-                <Quote className="w-5 h-5 text-primary/70 mb-4" />
+                <Quote className="w-5 h-5 text-muted-foreground mb-4" />
                 <p className="text-sm leading-relaxed text-foreground/90 mb-5">
                   {item.quote}
                 </p>
@@ -572,10 +573,10 @@ export default async function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-6 py-20 md:py-28 bg-card/30 border-t border-border/30">
+      <section className="px-6 py-20 md:py-28 bg-background">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10 md:mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-3">
+            <h2 className="tracking-display text-3xl md:text-4xl font-semibold text-foreground mb-3">
               Frequently asked questions
             </h2>
             <p className="text-muted-foreground">
@@ -604,7 +605,7 @@ export default async function LandingPage() {
             ].map((item) => (
               <details
                 key={item.q}
-                className="group rounded-md border border-border/50 bg-background px-5 py-4"
+                className="group rounded-none border border-border bg-card px-5 py-4"
               >
                 <summary className="cursor-pointer list-none font-medium text-foreground flex items-center justify-between gap-4">
                   <span>{item.q}</span>
@@ -620,12 +621,12 @@ export default async function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="px-6 py-20 md:py-32 bg-linear-to-br from-primary/10 via-primary/5 to-background border-t border-border/30">
+      <section className="px-6 py-24 md:py-36 bg-tile-dark text-on-dark">
         <div className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+          <h2 className="tracking-display text-3xl md:text-4xl lg:text-5xl font-semibold text-on-dark">
             Start studying smarter today
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground">
+          <p className="text-lg md:text-xl text-on-dark-muted">
             Get your first 10 AI actions free. No credit card. Start in under a
             minute.
           </p>
@@ -633,23 +634,23 @@ export default async function LandingPage() {
             <Link href="/login">
               <Button
                 size="lg"
-                className="gap-2 text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto shadow-lg hover:shadow-xl transition-shadow"
+                className="gap-2 text-base bg-white text-tile-dark hover:bg-white/90"
               >
                 Get started free
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <Link href="/pricing">
               <Button
                 variant="outline"
                 size="lg"
-                className="text-base md:text-lg px-6 md:px-8 py-5 md:py-6 h-auto"
+                className="text-base border-white/25 bg-transparent text-on-dark hover:bg-white/10 hover:text-on-dark hover:border-white/40"
               >
                 View pricing
               </Button>
             </Link>
           </div>
-          <p className="text-xs text-muted-foreground pt-2">
+          <p className="text-xs text-on-dark-muted pt-2">
             Privacy-conscious design · Built for focused learning · Your data
             stays yours
           </p>
@@ -657,11 +658,11 @@ export default async function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border/30 px-6 py-12 md:py-14 bg-card/30">
+      <footer className="border-t border-border px-6 py-12 md:py-14 bg-secondary">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8 pb-8 border-b border-border/30">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8 pb-8 border-b border-border">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-sm bg-primary/10 flex items-center justify-center border border-primary/20">
+              <div className="w-9 h-9 rounded-none bg-muted flex items-center justify-center border border-border">
                 <Image
                   src="/logo.png"
                   alt="StudyOS"

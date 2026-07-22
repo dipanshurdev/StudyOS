@@ -9,10 +9,10 @@ function SettingsSection({ title, description, icon: Icon, children }: {
   title: string; description: string; icon: any; children: React.ReactNode;
 }) {
   return (
-    <div className="bg-card border border-border rounded-xl overflow-hidden">
+    <div className="bg-card border border-border rounded-none overflow-hidden">
       <div className="px-5 py-4 border-b border-border/60">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-muted flex items-center justify-center">
+          <div className="w-7 h-7 rounded-none bg-muted flex items-center justify-center">
             <Icon className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
           <div>
@@ -48,12 +48,8 @@ export default async function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute right-0 top-20 h-64 w-64 rounded-full bg-primary/5 blur-[80px]" />
-      </div>
-
       {/* Header */}
-      <div className="border-b border-border/60 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
+      <div className="border-b border-border bg-background sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-6 h-14 flex items-center gap-3">
           <Link href="/dashboard">
             <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-muted-foreground">
@@ -69,8 +65,8 @@ export default async function SettingsPage() {
         {/* Account */}
         <SettingsSection title="Account" description="Your profile and login details" icon={User}>
           <div className="flex items-center gap-4 mb-5 pb-5 border-b border-border/50">
-            <div className="w-12 h-12 rounded-full bg-primary/15 border-2 border-primary/20 flex items-center justify-center shrink-0">
-              <span className="text-sm font-bold text-primary">{initials}</span>
+            <div className="w-12 h-12 rounded-full bg-muted border border-border flex items-center justify-center shrink-0">
+              <span className="text-sm font-semibold text-foreground">{initials}</span>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-foreground truncate">{name}</p>
@@ -93,7 +89,7 @@ export default async function SettingsPage() {
 
         {/* Usage */}
         <SettingsSection title="Usage" description="Daily AI action limits" icon={Bell}>
-          <div className="bg-primary/5 border border-primary/15 rounded-lg p-4">
+          <div className="bg-muted/50 border border-border rounded-none p-4">
             <p className="text-sm font-semibold text-foreground mb-1">Free Plan</p>
             <p className="text-xs text-muted-foreground mb-3">
               10 free AI actions per day, resetting at midnight UTC.
@@ -109,7 +105,7 @@ export default async function SettingsPage() {
           <SettingsRow
             label="Data encryption"
             description="All documents are encrypted in transit via TLS"
-            action={<span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-md">Active</span>}
+            action={<span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground bg-muted border border-border px-2 py-1 rounded-none">Active</span>}
           />
           <SettingsRow
             label="Two-factor authentication"
@@ -127,7 +123,7 @@ export default async function SettingsPage() {
         </SettingsSection>
 
         {/* Danger zone */}
-        <div className="bg-card border border-destructive/30 rounded-xl overflow-hidden">
+        <div className="bg-card border border-destructive/30 rounded-none overflow-hidden">
           <div className="px-5 py-4 border-b border-destructive/20">
             <h3 className="text-sm font-semibold text-destructive">Danger zone</h3>
             <p className="text-xs text-muted-foreground mt-0.5">Irreversible and destructive actions</p>

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Loader2, ChevronLeft, Plus, Sparkles, BookOpen } from "lucide-react"
+import { Loader2, ChevronLeft, Plus, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 
@@ -51,34 +51,31 @@ export default function NewDocumentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-xl">
         <div className="mb-8">
-          <Link href="/dashboard" className="flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors inline-flex group">
-            <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center mr-3 group-hover:bg-primary/10 transition-colors">
+          <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors inline-flex items-center group">
+            <div className="w-8 h-8 rounded-none bg-muted border border-border flex items-center justify-center mr-3 group-hover:border-foreground/20 transition-colors">
                <ChevronLeft className="w-4 h-4" />
             </div>
             Back to Dashboard
           </Link>
         </div>
         
-        <Card className="border-border/50 bg-card/60 backdrop-blur-xl shadow-2xl rounded-[2rem] overflow-hidden relative group">
-          <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-             <BookOpen className="w-32 h-32" />
-          </div>
+        <Card className="border-border bg-card shadow-xs rounded-none overflow-hidden">
           <CardHeader className="pt-10 px-10 pb-6 text-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-               <Plus className="w-8 h-8 text-primary" />
+            <div className="w-14 h-14 bg-muted border border-border rounded-none flex items-center justify-center mx-auto mb-6">
+               <Plus className="w-7 h-7 text-primary" />
             </div>
-            <CardTitle className="text-3xl font-black tracking-tight">New Study Material</CardTitle>
-            <CardDescription className="text-base font-medium mt-2">
+            <CardTitle className="text-2xl font-semibold tracking-tight">New Study Material</CardTitle>
+            <CardDescription className="text-sm mt-2">
               Start by giving your document a clear title.
             </CardDescription>
           </CardHeader>
           <CardContent className="px-10 pb-10">
             <form onSubmit={onSubmit} className="space-y-6">
-              <div className="space-y-3">
-                <Label htmlFor="title" className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Document Title</Label>
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Document Title</Label>
                 <Input
                   id="title"
                   placeholder="e.g., Quantum Physics - Week 3 Notes"
@@ -87,32 +84,32 @@ export default function NewDocumentPage() {
                   disabled={isLoading}
                   required
                   autoFocus
-                  className="h-14 rounded-md border-border/50 bg-background/50 text-lg font-semibold px-6 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30"
+                  className="h-11 text-base px-4 placeholder:text-muted-foreground/40"
                 />
               </div>
-              <div className="pt-4 flex flex-col sm:flex-row gap-3">
-                 <Button type="submit" disabled={isLoading} className="flex-1 h-14 rounded-md text-md font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-[0.98] transition-all gap-2">
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                 <Button type="submit" disabled={isLoading} className="flex-1 h-11 text-sm font-semibold gap-2">
                     {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                       <>
-                        <Sparkles className="w-5 h-5" />
+                        <Sparkles className="w-4 h-4" />
                         Create Document
                       </>
                     )}
                  </Button>
-                 <Button type="button" variant="ghost" className="h-14 px-8 rounded-md font-bold" asChild>
+                 <Button type="button" variant="ghost" className="h-11 px-6 text-sm font-medium" asChild>
                    <Link href="/dashboard">Cancel</Link>
                  </Button>
               </div>
             </form>
             
-            <div className="mt-8 pt-8 border-t border-border/20">
-               <div className="flex items-center gap-3 text-sm text-muted-foreground bg-muted/30 p-4 rounded-2xl border border-border/10">
-                  <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center flex-shrink-0">
-                     <Plus className="w-4 h-4 text-primary" />
+            <div className="mt-8 pt-6 border-t border-border">
+               <div className="flex items-center gap-3 text-sm text-muted-foreground bg-muted/40 p-3 rounded-none border border-border">
+                  <div className="w-7 h-7 rounded-none bg-card border border-border flex items-center justify-center flex-shrink-0">
+                     <Plus className="w-3.5 h-3.5 text-primary" />
                   </div>
-                  <p className="leading-tight">
+                  <p className="leading-tight text-xs">
                     You can paste text or ask AI for help once the document is created.
                   </p>
                </div>

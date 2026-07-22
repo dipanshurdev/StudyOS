@@ -52,16 +52,11 @@ const FAQS = [
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Background decoration */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-primary/6 blur-[120px]" />
-      </div>
-
       {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 border-b border-border bg-background">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+            <div className="w-7 h-7 rounded-none bg-muted flex items-center justify-center border border-border">
               <img src="/logo.png" alt="StudyOS" className="w-4 h-4 object-contain" />
             </div>
             <span className="font-bold text-[15px] text-foreground tracking-tight">
@@ -78,9 +73,9 @@ export default function PricingPage() {
       <div className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-20">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/8 border border-primary/20 rounded-full">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-muted border border-border rounded-full">
             <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-semibold text-primary">Simple, transparent pricing</span>
+            <span className="text-xs font-medium text-muted-foreground">Simple, transparent pricing</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
             The right plan for every student
@@ -97,7 +92,7 @@ export default function PricingPage() {
         {/* Pricing cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           {/* Free */}
-          <div className="bg-card border border-border rounded-2xl p-7 space-y-6 hover:shadow-sm transition-shadow">
+          <div className="bg-card border border-border rounded-none p-7 space-y-6 hover:border-foreground/20 transition-colors">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Zap className="w-4 h-4 text-muted-foreground" />
@@ -124,7 +119,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pro — highlighted */}
-          <div className="bg-card border-2 border-primary/50 rounded-2xl p-7 space-y-6 relative shadow-lg shadow-primary/8">
+          <div className="bg-card border border-primary/60 rounded-none p-7 space-y-6 relative">
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
               <span className="bg-primary text-primary-foreground text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                 Most Popular
@@ -159,7 +154,7 @@ export default function PricingPage() {
           </div>
 
           {/* Enterprise */}
-          <div className="bg-card border border-border rounded-2xl p-7 space-y-6 hover:shadow-sm transition-shadow">
+          <div className="bg-card border border-border rounded-none p-7 space-y-6 hover:border-foreground/20 transition-colors">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Building2 className="w-4 h-4 text-muted-foreground" />
@@ -200,7 +195,7 @@ export default function PricingPage() {
         </div>
 
         {/* CTA */}
-        <div className="text-center bg-card border border-border rounded-2xl p-10 space-y-4">
+        <div className="text-center bg-muted/30 border border-border rounded-none p-10 space-y-4">
           <h2 className="text-2xl font-bold text-foreground">Still have questions?</h2>
           <p className="text-sm text-muted-foreground">Our team is here to help you get started.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

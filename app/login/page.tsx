@@ -105,10 +105,10 @@ export default function LoginPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="w-full max-w-sm text-center space-y-4">
-          <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto border border-primary/20">
+          <div className="w-14 h-14 bg-primary/10 rounded-none flex items-center justify-center mx-auto border border-primary/20">
             <Mail className="w-7 h-7 text-primary" />
           </div>
-          <h1 className="text-xl font-bold text-foreground">Check your inbox</h1>
+          <h1 className="tracking-display text-2xl font-semibold text-foreground">Check your inbox</h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
             We sent a verification link to your email. Click it to activate your account.
           </p>
@@ -122,54 +122,65 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-background grid lg:grid-cols-2">
-      {/* Left panel — branding */}
-      <div className="hidden lg:flex flex-col relative bg-[oklch(0.115_0.016_264)] dark:bg-[oklch(0.09_0.016_264)] overflow-hidden">
-        {/* Background accents */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full dot-grid opacity-20" />
-          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary/20 blur-[100px]" />
-          <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-blue-500/15 blur-[80px]" />
-        </div>
+      {/* Left panel — branding + product */}
+      <div className="hidden lg:flex flex-col relative bg-secondary border-r border-border overflow-hidden">
+        <div className="absolute inset-0 dot-grid opacity-[0.4]" aria-hidden="true" />
         {/* Logo */}
         <div className="relative z-10 p-8">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center border border-white/15">
-              <img src="/logo.png" alt="StudyOS" className="w-5 h-5 object-contain brightness-0 invert" />
+            <div className="w-8 h-8 rounded-none bg-card flex items-center justify-center border border-border">
+              <img src="/logo.png" alt="StudyOS" className="w-5 h-5 object-contain" />
             </div>
-            <span className="text-lg font-bold text-white tracking-tight">StudyOS</span>
+            <span className="text-lg font-bold text-foreground tracking-tight">
+              Study<span className="text-primary">OS</span>
+            </span>
           </Link>
         </div>
         {/* Main copy */}
         <div className="relative z-10 flex-1 flex flex-col justify-center px-10">
-          <h2 className="text-3xl font-bold text-white leading-tight mb-4">
-            Study smarter,<br />
-            <span className="text-primary">not harder.</span>
+          <h2 className="tracking-display text-4xl font-semibold text-foreground leading-[1.1] mb-4">
+            Study <span className="text-primary">smarter</span>,<br />
+            not harder.
           </h2>
-          <p className="text-sm text-white/60 leading-relaxed mb-8 max-w-xs">
-            AI-powered tools that turn your notes into summaries, flashcards, and exam prep — in seconds.
+          <p className="text-base text-muted-foreground leading-relaxed mb-8 max-w-xs">
+            AI-powered tools that turn your notes into summaries, flashcards,
+            and exam prep — in seconds.
           </p>
+
+          {/* Product mini-preview — a flashcard being reviewed */}
+          <div className="product-shadow max-w-xs rounded-[18px] border border-border bg-card p-4 mb-8">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                Flashcard 3 / 12
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                Review today
+              </span>
+            </div>
+            <p className="text-sm font-medium text-foreground">
+              What powers the Calvin cycle?
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              ATP and NADPH from the light-dependent reactions.
+            </p>
+          </div>
+
           <div className="space-y-3">
             {FEATURES.map(({ icon: Icon, text }, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-md bg-white/8 flex items-center justify-center border border-white/10 shrink-0">
+                <div className="w-7 h-7 rounded-none bg-primary/10 flex items-center justify-center border border-primary/15 shrink-0">
                   <Icon className="w-3.5 h-3.5 text-primary" />
                 </div>
-                <span className="text-sm text-white/75">{text}</span>
+                <span className="text-sm text-foreground/80">{text}</span>
               </div>
             ))}
           </div>
         </div>
-        {/* Social proof */}
+        {/* Footer note */}
         <div className="relative z-10 px-10 pb-8">
-          <div className="border border-white/10 rounded-xl p-4 bg-white/5">
-            <p className="text-sm text-white/75 italic leading-relaxed mb-3">
-              "Summaries, flashcards, and the AI tutor in one place. I actually look forward to studying now."
-            </p>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-primary/30 flex items-center justify-center text-xs font-bold text-white">S</div>
-              <span className="text-xs text-white/50">Student, University</span>
-            </div>
-          </div>
+          <p className="text-xs text-muted-foreground">
+            10 free AI actions every day · No credit card required
+          </p>
         </div>
       </div>
 
@@ -183,10 +194,10 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">
+            <h1 className="tracking-display text-3xl font-semibold text-foreground">
               {isSignUp ? "Create your account" : "Welcome back"}
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-base text-muted-foreground mt-1.5">
               {isSignUp ? "Free to start · No credit card required" : "Sign in to continue to your workspace"}
             </p>
           </div>

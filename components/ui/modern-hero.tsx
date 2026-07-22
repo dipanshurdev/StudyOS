@@ -1,408 +1,181 @@
-import { Star } from "lucide-react";
+import Link from "next/link";
+import {
+  Sparkles,
+  Layers,
+  ListChecks,
+  GitBranch,
+  ArrowRight,
+  Check,
+} from "lucide-react";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-interface Hero7Props {
-  heading?: string;
-  description?: string;
-  button?: {
-    text: string;
-    url: string;
-  };
-  secondaryButton?: {
-    text: string;
-    url: string;
-  };
-  reviews?: {
-    count: number;
-    label?: string;
-    avatars: {
-      src: string;
-      alt: string;
-    }[];
-  };
+interface HeroAction {
+  text: string;
+  url: string;
 }
 
+interface Hero7Props {
+  primary?: HeroAction;
+  secondary?: HeroAction;
+}
+
+const AI_ACTIONS = [
+  { label: "Summarize", icon: Sparkles, active: true },
+  { label: "Flashcards", icon: Layers, active: false },
+  { label: "Practice", icon: ListChecks, active: false },
+  { label: "Mind map", icon: GitBranch, active: false },
+];
+
 const Hero7 = ({
-  heading = "Turn any material into exam-ready study tools",
-  description = "StudyOS transforms notes, PDFs, and lectures into summaries, flashcards, practice questions, and AI tutor chats so revision feels focused instead of frantic.",
-  button = {
-    text: "Get started free",
-    url: "/login",
-  },
-  secondaryButton = {
-    text: "Watch demo",
-    url: "#demo",
-  },
-  reviews = {
-    count: 200,
-    label: "early student workflows",
-    avatars: [
-       {
-        src: "https://www.shadcnblocks.com/images/block/avatar-1.webp",
-        alt: "Avatar 1",
-      },
-      {
-        src: "https://www.shadcnblocks.com/images/block/avatar-2.webp",
-        alt: "Avatar 2",
-      },
-      {
-        src: "https://www.shadcnblocks.com/images/block/avatar-3.webp",
-        alt: "Avatar 3",
-      },
-      {
-        src: "https://www.shadcnblocks.com/images/block/avatar-4.webp",
-        alt: "Avatar 4",
-      },
-      {
-        src: "https://www.shadcnblocks.com/images/block/avatar-5.webp",
-        alt: "Avatar 5",
-      },
-    ],
-  },
+  primary = { text: "Get started free", url: "/login" },
+  secondary = { text: "Watch demo", url: "#demo" },
 }: Hero7Props) => {
   return (
-    <section className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-7xl text-center">
-        <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
-          <div className="mx-auto w-fit rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-            AI-powered study workspace
+    <section className="px-6 pt-14 pb-16 md:pt-20 md:pb-24">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+        {/* Left — message */}
+        <div className="max-w-xl">
+          <div className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground">
+            <span className="inline-block size-1.5 rounded-full bg-primary" aria-hidden="true" />
+            AI study workspace
           </div>
-          <h1 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-7xl">
-            {heading}
+          <h1 className="tracking-display mt-5 text-[2.75rem] font-semibold leading-[1.05] text-foreground sm:text-6xl">
+            Turn any material into{" "}
+            <span className="text-primary">exam-ready</span> in minutes.
           </h1>
-          <p className="mx-auto max-w-2xl text-pretty text-base leading-7 text-muted-foreground md:text-xl md:leading-8">
-            {description}
+          <p className="mt-6 text-lg leading-8 text-muted-foreground md:text-xl">
+            Drop in notes, PDFs, or lecture slides. StudyOS writes the summary,
+            builds the flashcards, drafts practice questions, and explains what
+            you missed — in one workspace.
           </p>
-        </div>
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button asChild size="lg" className="h-12 px-7 text-base shadow-lg">
-            <a href={button.url}>{button.text}</a>
-          </Button>
-          {secondaryButton ? (
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="h-12 px-7 text-base"
-            >
-              <a href={secondaryButton.url}>{secondaryButton.text}</a>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Button asChild size="lg">
+              <Link href={primary.url}>
+                {primary.text}
+                <ArrowRight className="size-4" />
+              </Link>
             </Button>
-          ) : null}
-        </div>
-        <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
-          <span className="mx-4 inline-flex items-center -space-x-4">
-            {reviews.avatars.map((avatar) => (
-              <Avatar
-                key={avatar.src}
-                className="size-14 border-2 border-background"
-              >
-                <AvatarImage src={avatar.src} alt={avatar.alt} />
-              </Avatar>
-            ))}
-          </span>
-          <div>
-            <div
-              className="flex items-center justify-center gap-1 sm:justify-start"
-              aria-label="Five star rating"
-            >
-              {[...Array(5)].map((_, index) => (
-                <Star
-                  key={index}
-                  className="size-5 fill-yellow-400 text-yellow-400"
-                  aria-hidden="true"
-                />
-              ))}
-            </div>
-            <p className="text-center font-medium text-muted-foreground sm:text-left">
-              from {reviews.count}+ {reviews.label ?? "reviews"}
-            </p>
+            {secondary ? (
+              <Button asChild variant="outline" size="lg">
+                <Link href={secondary.url}>{secondary.text}</Link>
+              </Button>
+            ) : null}
           </div>
+          <dl className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-border pt-6">
+            {[
+              { value: "10", label: "free AI actions daily" },
+              { value: "6", label: "study tools per document" },
+              { value: "PDF", label: "notes & slides import" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <dt className="font-mono text-lg font-semibold tabular-nums text-foreground">
+                  {stat.value}
+                </dt>
+                <dd className="mt-0.5 text-xs text-muted-foreground">{stat.label}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
+
+        {/* Right — live product preview */}
+        <ProductPreview />
       </div>
     </section>
   );
 };
 
+function ProductPreview() {
+  return (
+    <div className="relative">
+      <div
+        className="product-shadow overflow-hidden rounded-[18px] border border-border bg-card"
+        role="img"
+        aria-label="StudyOS turning a biology chapter into an AI summary and a flashcard"
+      >
+        {/* Document header */}
+        <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+          <div className="flex gap-1.5" aria-hidden="true">
+            <span className="size-2.5 rounded-full bg-border" />
+            <span className="size-2.5 rounded-full bg-border" />
+            <span className="size-2.5 rounded-full bg-border" />
+          </div>
+          <span className="ml-2 truncate text-xs font-medium text-foreground">
+            Biology · Ch. 12 — Cell Division
+          </span>
+          <span className="ml-auto font-mono text-[10px] text-muted-foreground">
+            2,410 words
+          </span>
+        </div>
+
+        {/* AI action bar */}
+        <div className="flex flex-wrap gap-1.5 border-b border-border bg-muted/40 px-4 py-3">
+          {AI_ACTIONS.map(({ label, icon: Icon, active }) => (
+            <span
+              key={label}
+              className={
+                active
+                  ? "inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground"
+                  : "inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-xs font-medium text-muted-foreground"
+              }
+            >
+              <Icon className="size-3.5" />
+              {label}
+            </span>
+          ))}
+        </div>
+
+        {/* Generated result */}
+        <div className="space-y-4 px-4 py-4">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Summary
+            </p>
+            <ul className="space-y-2">
+              {[
+                "Mitosis produces two genetically identical diploid cells for growth and repair.",
+                "Meiosis produces four genetically distinct haploid gametes.",
+                "Crossing over in prophase I drives genetic variation.",
+              ].map((line) => (
+                <li key={line} className="flex gap-2 text-sm leading-6 text-foreground/90">
+                  <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Flashcard */}
+          <div className="rounded-none border border-border bg-muted/40 p-3.5">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                Flashcard 1 / 12
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                Review today
+              </span>
+            </div>
+            <p className="mt-2 text-sm font-medium text-foreground">
+              What separates during anaphase of mitosis?
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Sister chromatids are pulled to opposite poles of the cell.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Streaming indicator, honest and subtle */}
+      <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+        <span className="flex gap-1" aria-hidden="true">
+          <span className="typing-dot size-1.5 rounded-full bg-primary" />
+          <span className="typing-dot size-1.5 rounded-full bg-primary" />
+          <span className="typing-dot size-1.5 rounded-full bg-primary" />
+        </span>
+        Generated from your document in ~3 seconds
+      </div>
+    </div>
+  );
+}
+
 export { Hero7 };
-
-
-
-
-
-// You are given a task to integrate an existing React component in the codebase
-
-// The codebase should support:
-// - shadcn project structure  
-// - Tailwind CSS
-// - Typescript
-
-// If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
-
-// Determine the default path for components and styles. 
-// If default path for components is not /components/ui, provide instructions on why it's important to create this folder
-// Copy-paste this component to /components/ui folder:
-// ```tsx
-// modern-hero.tsx
-// import { Star } from "lucide-react";
-// import React from "react";
-
-// import { Avatar, AvatarImage } from "@/components/ui/avatar";
-// import { Button } from "@/components/ui/button";
-
-// interface Hero7Props {
-//   heading?: string;
-//   description?: string;
-//   button?: {
-//     text: string;
-//     url: string;
-//   };
-//   reviews?: {
-//     count: number;
-//     avatars: {
-//       src: string;
-//       alt: string;
-//     }[];
-//   };
-// }
-
-// const Hero7 = ({
-//   heading = "A Collection of Components Built With Shadcn & Tailwind",
-//   description = "Finely crafted components built with React, Tailwind and Shadcn UI. Developers can copy and paste these blocks directly into their project.",
-//   button = {
-//     text: "Discover all components",
-//     url: "https://www.shadcnblocks.com",
-//   },
-//   reviews = {
-//     count: 200,
-//     avatars: [
-//       {
-//         src: "https://www.shadcnblocks.com/images/block/avatar-1.webp",
-//         alt: "Avatar 1",
-//       },
-//       {
-//         src: "https://www.shadcnblocks.com/images/block/avatar-2.webp",
-//         alt: "Avatar 2",
-//       },
-//       {
-//         src: "https://www.shadcnblocks.com/images/block/avatar-3.webp",
-//         alt: "Avatar 3",
-//       },
-//       {
-//         src: "https://www.shadcnblocks.com/images/block/avatar-4.webp",
-//         alt: "Avatar 4",
-//       },
-//       {
-//         src: "https://www.shadcnblocks.com/images/block/avatar-5.webp",
-//         alt: "Avatar 5",
-//       },
-//     ],
-//   },
-// }: Hero7Props) => {
-//   return (
-//     <section className="py-32">
-//       <div className="container text-center">
-//         <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
-//           <h1 className="text-3xl font-extrabold lg:text-6xl">{heading}</h1>
-//           <p className="text-balance text-muted-foreground lg:text-lg">
-//             {description}
-//           </p>
-//         </div>
-//         <Button asChild size="lg" className="mt-10">
-//           <a href={button.url}>{button.text}</a>
-//         </Button>
-//         <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
-//           <span className="mx-4 inline-flex items-center -space-x-4">
-//             {reviews.avatars.map((avatar, index) => (
-//               <Avatar key={index} className="size-14 border">
-//                 <AvatarImage src={avatar.src} alt={avatar.alt} />
-//               </Avatar>
-//             ))}
-//           </span>
-//           <div>
-//             <div className="flex items-center gap-1">
-//               {[...Array(5)].map((_, index) => (
-//                 <Star
-//                   key={index}
-//                   className="size-5 fill-yellow-400 text-yellow-400"
-//                 />
-//               ))}
-//             </div>
-//             <p className="text-left font-medium text-muted-foreground">
-//               from {reviews.count}+ reviews
-//             </p>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export { Hero7 };
-
-
-// demo.tsx
-// import { Hero7 } from "@/components/blocks/modern-hero"
-
-// const demoData = {
-//   heading: "A Collection of Components Built With Shadcn & Tailwind",
-//   description:
-//     "Finely crafted components built with React, Tailwind and Shadcn UI. Developers can copy and paste these blocks directly into their project.",
-//   button: {
-//     text: "Discover all components",
-//     url: "https://www.shadcnblocks.com",
-//   },
-//   reviews: {
-//     count: 200,
-//     avatars: [
-    
-//     ],
-//   },
-// };
-
-// function Hero7Demo() {
-//   return <Hero7 {...demoData} />;
-// }
-
-// export { Hero7Demo };
-
-// ```
-
-// Copy-paste these files for dependencies:
-// ```tsx
-// shadcn/avatar
-// "use client"
-
-// import * as React from "react"
-// import * as AvatarPrimitive from "@radix-ui/react-avatar"
-
-// import { cn } from "@/lib/utils"
-
-// const Avatar = React.forwardRef<
-//   React.ElementRef<typeof AvatarPrimitive.Root>,
-//   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
-// >(({ className, ...props }, ref) => (
-//   <AvatarPrimitive.Root
-//     ref={ref}
-//     className={cn(
-//       "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
-//       className,
-//     )}
-//     {...props}
-//   />
-// ))
-// Avatar.displayName = AvatarPrimitive.Root.displayName
-
-// const AvatarImage = React.forwardRef<
-//   React.ElementRef<typeof AvatarPrimitive.Image>,
-//   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
-// >(({ className, ...props }, ref) => (
-//   <AvatarPrimitive.Image
-//     ref={ref}
-//     className={cn("aspect-square h-full w-full", className)}
-//     {...props}
-//   />
-// ))
-// AvatarImage.displayName = AvatarPrimitive.Image.displayName
-
-// const AvatarFallback = React.forwardRef<
-//   React.ElementRef<typeof AvatarPrimitive.Fallback>,
-//   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
-// >(({ className, ...props }, ref) => (
-//   <AvatarPrimitive.Fallback
-//     ref={ref}
-//     className={cn(
-//       "flex h-full w-full items-center justify-center rounded-full bg-muted",
-//       className,
-//     )}
-//     {...props}
-//   />
-// ))
-// AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
-
-// export { Avatar, AvatarImage, AvatarFallback }
-
-// ```
-// ```tsx
-// shadcn/button
-// import * as React from "react"
-// import { Slot } from "@radix-ui/react-slot"
-// import { cva, type VariantProps } from "class-variance-authority"
-
-// import { cn } from "@/lib/utils"
-
-// const buttonVariants = cva(
-//   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-//   {
-//     variants: {
-//       variant: {
-//         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-//         destructive:
-//           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-//         outline:
-//           "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-//         secondary:
-//           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-//         ghost: "hover:bg-accent hover:text-accent-foreground",
-//         link: "text-primary underline-offset-4 hover:underline",
-//       },
-//       size: {
-//         default: "h-10 px-4 py-2",
-//         sm: "h-9 rounded-md px-3",
-//         lg: "h-11 rounded-md px-8",
-//         icon: "h-10 w-10",
-//       },
-//     },
-//     defaultVariants: {
-//       variant: "default",
-//       size: "default",
-//     },
-//   },
-// )
-
-// export interface ButtonProps
-//   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-//     VariantProps<typeof buttonVariants> {
-//   asChild?: boolean
-// }
-
-// const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-//   ({ className, variant, size, asChild = false, ...props }, ref) => {
-//     const Comp = asChild ? Slot : "button"
-//     return (
-//       <Comp
-//         className={cn(buttonVariants({ variant, size, className }))}
-//         ref={ref}
-//         {...props}
-//       />
-//     )
-//   },
-// )
-// Button.displayName = "Button"
-
-// export { Button, buttonVariants }
-
-// ```
-
-// Install NPM dependencies:
-// ```bash
-// lucide-react, @radix-ui/react-avatar, @radix-ui/react-slot, class-variance-authority
-// ```
-
-// Implementation Guidelines
-//  1. Analyze the component structure and identify all required dependencies
-//  2. Review the component's argumens and state
-//  3. Identify any required context providers or hooks and install them
-//  4. Questions to Ask
-//  - What data/props will be passed to this component?
-//  - Are there any specific state management requirements?
-//  - Are there any required assets (images, icons, etc.)?
-//  - What is the expected responsive behavior?
-//  - What is the best place to use this component in the app?
-
-// Steps to integrate
-//  0. Copy paste all the code above in the correct directories
-//  1. Install external dependencies
-//  2. Fill image assets with Unsplash stock images you know exist
-//  3. Use lucide-react icons for svgs or logos if component requires them

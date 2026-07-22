@@ -13,19 +13,19 @@ import {
 const chartConfig = {
   actions: {
     label: "Total Actions",
-    color: "hsl(var(--primary))",
+    color: "var(--chart-1)",
   },
   summarize: {
     label: "Summarize",
-    color: "oklch(0.65 0.18 190)",
+    color: "var(--chart-1)",
   },
   explain: {
     label: "Explain",
-    color: "oklch(0.75 0.15 140)",
+    color: "var(--chart-2)",
   },
   practice: {
     label: "Practice",
-    color: "oklch(0.85 0.12 80)",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig
 
@@ -34,34 +34,28 @@ export function WeeklyActivityChart({ data }: { data: any[] }) {
     <div className="h-[300px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <defs>
-            <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={1} />
-              <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0.6} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.3} />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
           <XAxis
             dataKey="day"
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12, fontWeight: 500 }}
+            tick={{ fill: 'var(--muted-foreground)', fontSize: 12, fontWeight: 500 }}
             tickFormatter={(value) => value.slice(0, 3)}
           />
           <YAxis
             tickLine={false}
             axisLine={false}
-            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+            tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
           />
           <Tooltip 
-            cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }}
+            cursor={{ fill: 'var(--muted)', opacity: 0.4 }}
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className="bg-card/90 backdrop-blur-md border border-border/50 p-3 rounded-md shadow-xl">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">{payload[0].payload.day}</p>
-                    <p className="text-lg font-extrabold text-foreground">{payload[0].value} <span className="text-xs font-normal text-muted-foreground">actions</span></p>
+                  <div className="bg-popover border border-border p-3 rounded-none shadow-xs">
+                    <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mb-1">{payload[0].payload.day}</p>
+                    <p className="text-lg font-mono font-semibold text-foreground tabular-nums">{payload[0].value} <span className="text-xs font-sans font-normal text-muted-foreground">actions</span></p>
                   </div>
                 )
               }
@@ -70,10 +64,10 @@ export function WeeklyActivityChart({ data }: { data: any[] }) {
           />
           <Bar 
             dataKey="actions" 
-            fill="url(#barGradient)" 
-            radius={[6, 6, 0, 0]} 
+            fill="var(--chart-1)" 
+            radius={[4, 4, 0, 0]} 
             barSize={32}
-            animationDuration={1500}
+            animationDuration={800}
           />
         </BarChart>
       </ResponsiveContainer>
@@ -102,7 +96,7 @@ export function ActionBreakdownChart({ data }: { data: any[] }) {
             {data.map((entry, index) => (
               <Cell 
                 key={`cell-${index}`} 
-                fill={entry.fill || `hsl(var(--chart-${(index % 5) + 1}))`} 
+                fill={entry.fill || `var(--chart-${(index % 5) + 1})`} 
                 className="hover:opacity-80 transition-opacity cursor-pointer outline-none"
               />
             ))}
@@ -119,14 +113,14 @@ export function ActionBreakdownChart({ data }: { data: any[] }) {
                       <tspan
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground text-4xl font-black transition-all"
+                        className="fill-foreground text-4xl font-mono font-semibold transition-all"
                       >
                         {totalActions.toLocaleString()}
                       </tspan>
                       <tspan
                         x={viewBox.cx}
                         y={(viewBox.cy || 0) + 24}
-                        className="fill-muted-foreground text-[10px] font-bold uppercase tracking-widest"
+                        className="fill-muted-foreground text-[10px] font-medium uppercase tracking-widest"
                       >
                         Actions
                       </tspan>
@@ -140,11 +134,11 @@ export function ActionBreakdownChart({ data }: { data: any[] }) {
              content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-card/90 backdrop-blur-md border border-border/50 p-3 rounded-md shadow-xl flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: payload[0].payload.fill }}></div>
+                    <div className="bg-popover border border-border p-3 rounded-none shadow-xs flex items-center gap-3">
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: payload[0].payload.fill }}></div>
                       <div>
-                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{payload[0].name}</p>
-                         <p className="text-sm font-extrabold text-foreground">{payload[0].value} usage</p>
+                         <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{payload[0].name}</p>
+                         <p className="text-sm font-mono font-semibold text-foreground tabular-nums">{payload[0].value} usage</p>
                       </div>
                     </div>
                   )

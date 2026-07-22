@@ -1,5 +1,6 @@
 import type React from "react";
 import { ModernSidebar } from "@/components/dashboard/modern-sidebar";
+import { CommandPalette } from "@/components/dashboard/command-palette";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getOrCreateUser } from "@/lib/db";
@@ -41,6 +42,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
+      <CommandPalette />
       <ModernSidebar user={userData} />
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <main className="flex-1 overflow-auto">

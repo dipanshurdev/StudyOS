@@ -5,89 +5,118 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* On Apple platforms this resolves to real SF Pro; elsewhere Inter is the
+   closest open-source equivalent (per DESIGN.md font-substitute guidance). */
 body {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter",
+    system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "cv11", "ss01", "ss03";
+  font-feature-settings: "ss03";
 }
 
 :root {
-  /* StudyOS Enterprise Theme — Light Mode */
-  --background: oklch(0.985 0.002 264);
-  --foreground: oklch(0.145 0.018 264);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0.018 264);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0.018 264);
-  --primary: oklch(0.46 0.21 264);
-  --primary-foreground: oklch(0.985 0.002 264);
-  --secondary: oklch(0.955 0.006 264);
-  --secondary-foreground: oklch(0.25 0.03 264);
-  --muted: oklch(0.96 0.004 264);
-  --muted-foreground: oklch(0.52 0.016 264);
-  --accent: oklch(0.94 0.015 264);
-  --accent-foreground: oklch(0.18 0.06 264);
-  --destructive: oklch(0.577 0.245 27.3);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.91 0.006 264);
-  --input: oklch(0.93 0.006 264);
-  --ring: oklch(0.46 0.21 264);
-  --radius: 0.5rem;
+  /* StudyOS — Apple design language · Light
+     Photography-first: white + parchment surfaces, near-black ink,
+     a single Action Blue accent. No decorative gradients. */
+  --background: #ffffff;
+  --foreground: #1d1d1f; /* ink */
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1f;
 
-  /* Enterprise sidebar */
-  --sidebar-bg: oklch(0.975 0.003 264);
-  --sidebar-border: oklch(0.905 0.006 264);
+  --primary: #0066cc; /* Action Blue — the single interactive color */
+  --primary-foreground: #ffffff;
 
-  /* Glow colors */
-  --glow-primary: oklch(0.46 0.21 264 / 0.15);
-  --glow-secondary: oklch(0.55 0.18 200 / 0.1);
+  --secondary: #f5f5f7; /* parchment */
+  --secondary-foreground: #1d1d1f;
+  --muted: #f5f5f7;
+  --muted-foreground: #6e6e73;
+  --accent: #f5f5f7;
+  --accent-foreground: #1d1d1f;
 
-  --chart-1: oklch(0.55 0.22 264);
-  --chart-2: oklch(0.65 0.18 200);
-  --chart-3: oklch(0.72 0.16 155);
-  --chart-4: oklch(0.78 0.14 85);
-  --chart-5: oklch(0.62 0.2 320);
+  --destructive: #b3261e;
+  --destructive-foreground: #ffffff;
+
+  --border: #d2d2d7; /* hairline */
+  --input: #d2d2d7;
+  --ring: #0071e3; /* focus blue */
+  --radius: 0.75rem;
+
+  /* Apple surface system */
+  --parchment: #f5f5f7;
+  --pearl: #fafafc;
+  --tile-dark: #1d1d1f;
+  --tile-dark-2: #272729;
+  --primary-on-dark: #2997ff; /* sky link blue for dark tiles */
+  --on-dark: #ffffff;
+  --on-dark-muted: #a1a1a6;
+
+  --sidebar-bg: #f5f5f7;
+  --sidebar-border: #e0e0e0;
+
+  /* Chart palette — Action Blue + restrained neutrals */
+  --chart-1: #0066cc;
+  --chart-2: #2997ff;
+  --chart-3: #6e6e73;
+  --chart-4: #b0b0b5;
+  --chart-5: #1d1d1f;
 }
 
 .dark {
-  /* StudyOS Enterprise Dark Mode — Deep Navy */
-  --background: oklch(0.115 0.016 264);
-  --foreground: oklch(0.945 0.008 264);
-  --card: oklch(0.145 0.018 264);
-  --card-foreground: oklch(0.945 0.008 264);
-  --popover: oklch(0.155 0.018 264);
-  --popover-foreground: oklch(0.945 0.008 264);
-  --primary: oklch(0.62 0.22 264);
-  --primary-foreground: oklch(0.115 0.016 264);
-  --secondary: oklch(0.195 0.02 264);
-  --secondary-foreground: oklch(0.9 0.008 264);
-  --muted: oklch(0.185 0.018 264);
-  --muted-foreground: oklch(0.56 0.016 264);
-  --accent: oklch(0.2 0.025 264);
-  --accent-foreground: oklch(0.9 0.012 264);
-  --destructive: oklch(0.45 0.22 27.3);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.22 0.018 264);
-  --input: oklch(0.2 0.018 264);
-  --ring: oklch(0.62 0.22 264);
+  /* StudyOS — Apple design language · Dark
+     Pure black void with near-black tiles; sky-blue accent that survives
+     on dark surfaces. */
+  --background: #000000;
+  --foreground: #f5f5f7;
+  --card: #1d1d1f;
+  --card-foreground: #f5f5f7;
+  --popover: #1d1d1f;
+  --popover-foreground: #f5f5f7;
 
-  --sidebar-bg: oklch(0.13 0.017 264);
-  --sidebar-border: oklch(0.21 0.018 264);
+  --primary: #2997ff; /* sky link blue reads as the action color on dark */
+  --primary-foreground: #ffffff;
 
-  --glow-primary: oklch(0.62 0.22 264 / 0.18);
-  --glow-secondary: oklch(0.65 0.18 200 / 0.12);
+  --secondary: #1d1d1f;
+  --secondary-foreground: #f5f5f7;
+  --muted: #1d1d1f;
+  --muted-foreground: #a1a1a6;
+  --accent: #2a2a2c;
+  --accent-foreground: #f5f5f7;
 
-  --chart-1: oklch(0.65 0.22 264);
-  --chart-2: oklch(0.72 0.18 200);
-  --chart-3: oklch(0.78 0.16 155);
-  --chart-4: oklch(0.84 0.14 85);
-  --chart-5: oklch(0.7 0.2 320);
+  --destructive: #ff453a;
+  --destructive-foreground: #ffffff;
+
+  --border: #2a2a2c;
+  --input: #3a3a3c;
+  --ring: #2997ff;
+
+  --parchment: #1d1d1f;
+  --pearl: #2a2a2c;
+  --tile-dark: #000000;
+  --tile-dark-2: #1d1d1f;
+  --primary-on-dark: #2997ff;
+  --on-dark: #ffffff;
+  --on-dark-muted: #a1a1a6;
+
+  --sidebar-bg: #0a0a0a;
+  --sidebar-border: #2a2a2c;
+
+  --chart-1: #2997ff;
+  --chart-2: #64d2ff;
+  --chart-3: #a1a1a6;
+  --chart-4: #5a5a5e;
+  --chart-5: #f5f5f7;
 }
 
 @theme inline {
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter",
+    system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -107,16 +136,23 @@ body {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-parchment: var(--parchment);
+  --color-pearl: var(--pearl);
+  --color-tile-dark: var(--tile-dark);
+  --color-tile-dark-2: var(--tile-dark-2);
+  --color-primary-on-dark: var(--primary-on-dark);
+  --color-on-dark: var(--on-dark);
+  --color-on-dark-muted: var(--on-dark-muted);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 2px);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 2px);
-  --radius-xl: calc(var(--radius) + 6px);
-  --radius-2xl: calc(var(--radius) + 10px);
+  --radius-sm: 0.5rem;   /* 8px — dark utility buttons */
+  --radius-md: 0.6875rem;/* 11px — pearl capsules */
+  --radius-lg: 1.125rem; /* 18px — utility cards */
+  --radius-xl: 1.25rem;  /* 20px */
+  --radius-2xl: 1.5rem;  /* 24px */
 }
 
 /* ============================================================
@@ -128,18 +164,18 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  /* "Apple tight" — negative tracking at display sizes, weight 600 */
+  h1, h2, h3 {
+    letter-spacing: -0.022em;
   }
   ::selection {
-    background: oklch(0.46 0.21 264 / 0.18);
+    background: color-mix(in oklab, var(--primary) 22%, transparent);
   }
-  .dark ::selection {
-    background: oklch(0.62 0.22 264 / 0.3);
-  }
-  /* Custom scrollbars */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
@@ -153,106 +189,89 @@ body {
 }
 
 /* ============================================================
-   ENTERPRISE UTILITY CLASSES
+   UTILITY CLASSES
    ============================================================ */
 @layer utilities {
-  /* Glass morphism */
-  .glass {
-    @apply bg-card/70 backdrop-blur-xl border border-white/10 dark:border-white/5;
-  }
-  .glass-strong {
-    @apply bg-background/90 backdrop-blur-2xl border border-border;
-  }
-  .glass-primary {
-    @apply bg-primary/8 backdrop-blur-xl border border-primary/15;
-  }
-
-  /* Text gradients */
-  .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, var(--primary), oklch(0.55 0.2 220));
-  }
-  .text-gradient-subtle {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, oklch(0.46 0.21 264), oklch(0.46 0.21 264 / 0.7));
+  /* The signature "Apple tight" display tracking for hero headlines */
+  .tracking-display {
+    letter-spacing: -0.028em;
   }
 
   /* Surface variants */
   .surface-base {
-    @apply bg-card border border-border rounded-xl;
+    @apply bg-card border border-border rounded-none;
   }
   .surface-raised {
-    @apply bg-card border border-border rounded-xl shadow-sm;
+    @apply bg-card border border-border rounded-none;
   }
   .surface-sunken {
-    @apply bg-muted/40 border border-border/60 rounded-lg;
+    @apply bg-secondary border border-border/60 rounded-none;
   }
 
-  /* Focus ring */
+  /* The ONE shadow in the system — reserved for product imagery resting
+     on a surface (DESIGN.md §Elevation). Never on chrome, buttons, or text. */
+  .product-shadow {
+    box-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
+  }
+
+  /* Frosted sticky bar / sub-nav (functional blur, not decoration) */
+  .frosted {
+    background: color-mix(in oklab, var(--parchment) 80%, transparent);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  /* Focus ring — Action Blue */
   .focus-ring {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
-  /* Shimmer effect for loading */
+  /* Shimmer effect for loading (neutral) */
   .shimmer {
     background: linear-gradient(
       90deg,
-      oklch(var(--muted) / 0) 0%,
-      oklch(var(--muted) / 0.5) 50%,
-      oklch(var(--muted) / 0) 100%
+      color-mix(in oklab, var(--muted) 0%, transparent) 0%,
+      color-mix(in oklab, var(--muted) 65%, transparent) 50%,
+      color-mix(in oklab, var(--muted) 0%, transparent) 100%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
   }
 
-  /* Dot grid background */
+  /* Dot grid background (neutral) */
   .dot-grid {
     background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
-  /* Subtle line pattern */
-  .line-grid {
-    background-image:
-      linear-gradient(oklch(0.46 0.21 264 / 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, oklch(0.46 0.21 264 / 0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
   /* Sidebar specific */
   .sidebar-item {
-    @apply flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm font-medium text-muted-foreground transition-all duration-150 cursor-pointer select-none;
+    @apply flex items-center gap-2.5 px-2.5 py-2 rounded-none text-sm font-normal text-muted-foreground transition-colors duration-150 cursor-pointer select-none;
   }
   .sidebar-item:hover {
     @apply bg-accent text-accent-foreground;
   }
   .sidebar-item.active {
-    @apply bg-primary/10 text-primary;
-  }
-
-  /* Status dot */
-  .status-dot-online {
-    @apply w-2 h-2 rounded-full bg-emerald-500;
-    box-shadow: 0 0 0 3px oklch(0.72 0.17 155 / 0.2);
+    @apply bg-accent text-foreground font-medium;
   }
 
   /* Badge variants */
   .badge-pro {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20;
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-primary/10 text-primary border border-primary/15;
   }
-  .badge-new {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20;
+  .badge-neutral {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-secondary text-muted-foreground border border-border;
   }
 
   /* AI response markdown */
   .prose-ai {
-    @apply text-foreground/90 text-sm leading-7;
+    @apply text-foreground/90 text-[15px] leading-7;
   }
   .prose-ai h1 {
-    @apply text-xl font-bold text-foreground mt-6 mb-3;
+    @apply text-xl font-semibold text-foreground mt-6 mb-3 tracking-tight;
   }
   .prose-ai h2 {
-    @apply text-lg font-semibold text-foreground mt-5 mb-2.5;
+    @apply text-lg font-semibold text-foreground mt-5 mb-2.5 tracking-tight;
   }
   .prose-ai h3 {
     @apply text-base font-semibold text-foreground mt-4 mb-2;
@@ -279,13 +298,13 @@ body {
     @apply italic text-foreground/80;
   }
   .prose-ai code {
-    @apply bg-muted px-1.5 py-0.5 rounded text-[13px] font-mono border border-border text-foreground/90;
+    @apply bg-secondary px-1.5 py-0.5 rounded text-[13px] font-mono border border-border text-foreground/90;
   }
   .prose-ai pre {
-    @apply bg-muted/60 p-4 rounded-lg font-mono text-sm my-4 overflow-x-auto border border-border;
+    @apply bg-secondary p-4 rounded-none font-mono text-sm my-4 overflow-x-auto border border-border;
   }
   .prose-ai blockquote {
-    @apply border-l-2 border-primary/50 pl-4 italic text-muted-foreground my-4 bg-primary/5 py-2 rounded-r-md;
+    @apply border-l-2 border-primary/50 pl-4 italic text-muted-foreground my-4;
   }
   .prose-ai hr {
     @apply border-border my-4;
@@ -294,7 +313,7 @@ body {
     @apply w-full border-collapse text-sm my-4;
   }
   .prose-ai th {
-    @apply border border-border bg-muted px-3 py-2 text-left font-semibold text-foreground;
+    @apply border border-border bg-secondary px-3 py-2 text-left font-semibold text-foreground;
   }
   .prose-ai td {
     @apply border border-border px-3 py-2 text-foreground/80;
@@ -317,16 +336,8 @@ body {
   to { opacity: 1; transform: translateX(0); }
 }
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
+  from { opacity: 0; transform: scale(0.96); }
   to { opacity: 1; transform: scale(1); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
-}
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 var(--glow-primary); }
-  50% { box-shadow: 0 0 20px 4px var(--glow-primary); }
 }
 @keyframes typing-dot {
   0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
@@ -336,8 +347,14 @@ body {
 .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
 .animate-slide-in-left { animation: slideInLeft 0.3s ease-out forwards; }
 .animate-scale-in { animation: scaleIn 0.2s ease-out forwards; }
-.animate-float { animation: float 4s ease-in-out infinite; }
-.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .typing-dot { animation: typing-dot 1.2s ease-in-out infinite; }
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

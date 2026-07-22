@@ -26,7 +26,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(
-        "rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors",
+        "rounded-none text-muted-foreground hover:text-foreground hover:bg-accent transition-colors",
         className,
       )}
     >

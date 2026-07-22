@@ -62,13 +62,10 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
     fetchDocuments();
   }, []);
 
-  // Keyboard shortcut: Cmd/Ctrl+K to focus search
+  // Keyboard shortcut: Cmd/Ctrl+N to create a new document.
+  // Cmd/Ctrl+K is handled globally by the command palette.
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        document.getElementById("sidebar-search")?.focus();
-      }
       if ((e.metaKey || e.ctrlKey) && e.key === "n") {
         e.preventDefault();
         setOpenDialog(true);
@@ -134,7 +131,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
         {/* ── Logo ─────────────────────────────────────────── */}
         <div className="h-14 px-4 flex items-center justify-between border-b border-[var(--sidebar-border)]">
           <Link href="/" className="flex items-center gap-2.5 group min-w-0">
-            <div className="w-7 h-7 shrink-0 flex items-center justify-center rounded-lg bg-primary/10 border border-primary/20 group-hover:bg-primary/15 transition-colors">
+            <div className="w-7 h-7 shrink-0 flex items-center justify-center rounded-none bg-muted border border-border group-hover:border-foreground/20 transition-colors">
               <img
                 src="/logo.png"
                 alt="StudyOS"
@@ -157,7 +154,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
           >
             <Button
               size="sm"
-              className="w-full h-8 gap-1.5 text-xs font-semibold rounded-md shadow-none justify-start px-2.5"
+              className="w-full h-8 gap-1.5 text-xs font-semibold rounded-none shadow-none justify-start px-2.5"
             >
               <Plus className="w-3.5 h-3.5 shrink-0" />
               New document
@@ -172,7 +169,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
         <div className="px-3 pb-2">
           <div
             className={cn(
-              "flex items-center gap-2 h-8 px-2.5 rounded-md border text-xs transition-all duration-150",
+              "flex items-center gap-2 h-8 px-2.5 rounded-none border text-xs transition-all duration-150",
               isSearchFocused
                 ? "border-ring bg-background ring-1 ring-ring/30"
                 : "border-border/60 bg-muted/30 hover:bg-muted/60"
@@ -246,7 +243,7 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
             {isLoading ? (
               <div className="space-y-1 py-1">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-8 rounded-md bg-muted/50 animate-pulse" />
+                  <div key={i} className="h-8 rounded-none bg-muted/50 animate-pulse" />
                 ))}
               </div>
             ) : filteredDocuments.length === 0 ? (
@@ -264,9 +261,9 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
                     <Link key={doc.id} href={`/dashboard/${doc.id}`}>
                       <div
                         className={cn(
-                          "group flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-100",
+                          "group flex items-center gap-2 px-2 py-1.5 rounded-none cursor-pointer transition-colors",
                           isDocActive
-                            ? "bg-primary/10 text-primary"
+                            ? "bg-accent text-foreground"
                             : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                         )}
                       >
@@ -298,15 +295,15 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
           {/* Upgrade banner for free users */}
           {!isPro && (
             <Link href="/pricing">
-              <div className="group flex items-center gap-2 px-2.5 py-2 rounded-md bg-primary/5 border border-primary/15 hover:bg-primary/10 transition-colors cursor-pointer">
-                <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center shrink-0 group-hover:bg-primary/25 transition-colors">
+              <div className="group flex items-center gap-2 px-2.5 py-2 rounded-none bg-muted/50 border border-border hover:bg-muted transition-colors cursor-pointer">
+                <div className="w-5 h-5 rounded-none bg-primary/10 flex items-center justify-center shrink-0">
                   <Zap className="w-3 h-3 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[11px] font-semibold text-foreground leading-tight">Upgrade to Pro</p>
                   <p className="text-[10px] text-muted-foreground truncate">Unlimited AI · $9/mo</p>
                 </div>
-                <ChevronDown className="w-3 h-3 text-muted-foreground shrink-0 -rotate-90 group-hover:text-primary transition-colors" />
+                <ChevronDown className="w-3 h-3 text-muted-foreground shrink-0 -rotate-90 group-hover:text-foreground transition-colors" />
               </div>
             </Link>
           )}
@@ -314,9 +311,9 @@ export function ModernSidebar({ user }: ModernSidebarProps) {
           {/* User menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-md hover:bg-accent transition-colors text-left group">
-                <div className="w-7 h-7 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0">
-                  <span className="text-xs font-bold text-primary">
+              <button className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-none hover:bg-accent transition-colors text-left group">
+                <div className="w-7 h-7 rounded-full bg-muted border border-border flex items-center justify-center shrink-0">
+                  <span className="text-xs font-bold text-foreground">
                     {(user?.name || user?.email || "U")[0].toUpperCase()}
                   </span>
                 </div>
