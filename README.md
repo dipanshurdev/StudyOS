@@ -1,3 +1,6 @@
+<img width="922" height="493" alt="Screenshot 2026-07-23 221604" src="https://github.com/user-attachments/assets/c46e0301-1e33-4e3d-b615-aa4aa8f56634" />
+
+
 # StudyOS – AI-Powered Study Platform
 
 A modern SaaS platform that helps students study faster using AI. Create summaries, explanations, flashcards, mind maps, and practice questions from your notes. Built with Next.js, Supabase, and Groq/HuggingFace AI.
