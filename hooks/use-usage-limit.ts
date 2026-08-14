@@ -8,7 +8,7 @@ interface UsageData {
 }
 
 export function useUsageLimit() {
-  const [data, setData] = useState<UsageData>({ usage: 0, limit: 5 })
+  const [data, setData] = useState<UsageData>({ usage: 0, limit: 10 })
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -18,10 +18,19 @@ export function useUsageLimit() {
   const fetchUsage = async () => {
     try {
       const response = await fetch("/api/usage")
+      if (!response.ok) {
+        setData({ usage: 0, limit: 10 })
+        return
+      }
       const result = await response.json()
-      setData(result)
+      if (typeof result.usage === "number" && typeof result.limit === "number") {
+        setData({ usage: result.usage, limit: result.limit })
+      } else {
+        setData({ usage: 0, limit: 10 })
+      }
     } catch (error) {
       console.error("Failed to fetch usage:", error)
+      setData({ usage: 0, limit: 10 })
     } finally {
       setIsLoading(false)
     }

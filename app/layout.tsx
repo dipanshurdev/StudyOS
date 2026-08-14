@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 }
 
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/components/auth-provider"
 
 export default function RootLayout({
   children,
@@ -41,6 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <AuthProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -51,6 +53,7 @@ export default function RootLayout({
           <Toaster richColors position="bottom-right" />
           <Analytics />
         </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )

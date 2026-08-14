@@ -5,8 +5,35 @@ const PRODUCTION_HOST =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, "").split("/")[0] ??
   "studyos-ai.vercel.app";
 
+const AUTH_COOKIE_PREFIX = "sb-";
+const AUTH_COOKIE_SUFFIX = "-auth-token";
+
 function isPreviewDeployment(host: string): boolean {
   return host !== PRODUCTION_HOST && host.endsWith("vercel.app");
+}
+
+function isInvalidRefreshTokenError(error: any): boolean {
+  if (!error) return false;
+  const message = String(error.message ?? "").toLowerCase();
+  const code = String(error.code ?? "");
+  return (
+    code.includes("refresh_token_not_found") ||
+    message.includes("invalid refresh token") ||
+    message.includes("refresh token not found")
+  );
+}
+
+function isAuthCookie(name: string): boolean {
+  return name.startsWith(AUTH_COOKIE_PREFIX) && name.endsWith(AUTH_COOKIE_SUFFIX);
+}
+
+function clearAuthCookies(request: NextRequest, response: NextResponse): NextResponse {
+  for (const cookie of request.cookies.getAll()) {
+    if (isAuthCookie(cookie.name)) {
+      response.cookies.set(cookie.name, "", { maxAge: 0, path: "/" });
+    }
+  }
+  return response;
 }
 
 export async function updateSession(request: NextRequest) {
@@ -66,9 +93,30 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const {
+      data: { user: currentUser },
+      error,
+    } = await supabase.auth.getUser();
+
+    // A stale/revoked refresh token makes every request retry the refresh
+    // endpoint and log "Invalid Refresh Token: Refresh Token Not Found".
+    // Drop the dead cookies so the user gets a clean session instead of an
+    // infinite loop of failed refreshes.
+    if (error && isInvalidRefreshTokenError(error)) {
+      if (request.nextUrl.pathname.startsWith("/dashboard")) {
+        const redirect = NextResponse.redirect(new URL("/login", request.url));
+        return clearAuthCookies(request, redirect);
+      }
+      const next = NextResponse.next({ request });
+      return clearAuthCookies(request, next);
+    }
+
+    user = currentUser ?? null;
+  } catch {
+    user = null;
+  }
 
   if (request.nextUrl.pathname.startsWith("/dashboard") && !user) {
     return NextResponse.redirect(new URL("/login", request.url));

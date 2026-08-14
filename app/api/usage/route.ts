@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
-import { checkAndResetCredits } from "@/lib/api-limits";
+import { checkAndResetCredits, PLAN_LIMITS } from "@/lib/api-limits";
 
 export async function GET() {
   try {
@@ -34,7 +34,7 @@ export async function GET() {
       });
     }
 
-    const limit = userData.plan_type === "pro" ? 100 : 10;
+    const limit = PLAN_LIMITS[userData.plan_type as keyof typeof PLAN_LIMITS] || PLAN_LIMITS.free;
     const used = userData.ai_credits_used_today || 0;
     const remaining = Math.max(0, limit - used);
 

@@ -6,6 +6,8 @@ const PLAN_LIMITS = {
   enterprise: 999,
 };
 
+export { PLAN_LIMITS };
+
 export async function checkAndResetCredits(userId: string) {
   const { data: user } = await supabaseAdmin
     .from("users")

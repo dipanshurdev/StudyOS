@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { generateAIResponse } from "@/lib/ai";
-import { recordAIUsage } from "@/lib/api-limits";
+import { AILimitError } from "@/lib/ai-errors";
+import { checkRateLimit, recordAIUsage } from "@/lib/api-limits";
 import { supabaseAdmin } from "@/lib/supabase";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -22,6 +23,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Message is required" },
         { status: 400 },
+      );
+    }
+
+    // Enforce the daily plan limit server-side.
+    const { allowed } = await checkRateLimit(user.id);
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: "Rate limit reached",
+          message:
+            "You've used all your AI actions for today. Upgrade to Pro for more.",
+        },
+        { status: 429 },
       );
     }
 
@@ -70,8 +84,29 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Chat API error:", error);
+
+    if (error instanceof AILimitError) {
+      return NextResponse.json(
+        { error: "Invalid request", message: error.message },
+        { status: error.status },
+      );
+    }
+
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+
+    if (errorMessage.includes("temporarily unavailable")) {
+      return NextResponse.json(
+        { error: "Service unavailable", message: errorMessage },
+        { status: 503 },
+      );
+    }
+
     return NextResponse.json(
-      { error: "Failed to process chat message" },
+      {
+        error: "Failed to process chat message",
+        message: errorMessage || "Unable to process your message. Please try again.",
+      },
       { status: 500 },
     );
   }

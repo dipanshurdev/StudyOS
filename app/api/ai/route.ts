@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { generateAIResponse } from "@/lib/ai";
-import { recordAIUsage } from "@/lib/api-limits";
+import { AILimitError } from "@/lib/ai-errors";
+import { checkRateLimit, recordAIUsage } from "@/lib/api-limits";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -53,6 +54,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Enforce the daily plan limit server-side, not just on the client.
+    const { allowed, remaining } = await checkRateLimit(userId);
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: "Rate limit reached",
+          message:
+            "You've used all your AI actions for today. Upgrade to Pro for more.",
+        },
+        { status: 429 },
+      );
+    }
+
     console.log(`Processing ${action}, content length: ${content.length}`);
 
     const conversationHistory = body.conversationHistory || undefined;
@@ -62,17 +76,25 @@ export async function POST(request: NextRequest) {
       conversationHistory,
     );
 
-    // Note: recordAIUsage likely needs update too if it used NextAuth,
-    // but it likely takes userId which we are passing correctly now.
     await recordAIUsage(userId, action, documentId);
 
     return NextResponse.json({
       result,
-      remaining: 0, // client should refetch usage to be accurate
+      remaining: Math.max(0, remaining - 1),
       success: true,
     });
   } catch (error) {
     console.error("AI API error:", error);
+
+    if (error instanceof AILimitError) {
+      return NextResponse.json(
+        {
+          error: "Invalid request",
+          message: error.message,
+        },
+        { status: error.status },
+      );
+    }
 
     const errorMessage =
       error instanceof Error ? error.message : "An unknown error occurred";
@@ -90,7 +112,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Processing failed",
-        message: "Unable to process your request. Please try again.",
+        message: errorMessage || "Unable to process your request. Please try again.",
       },
       { status: 500 },
     );

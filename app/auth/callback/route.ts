@@ -2,10 +2,16 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import { getOrCreateUser } from "@/lib/db";
 
-// Always redirect to production so auth never sends users to a preview URL.
-const PRODUCTION_URL =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ??
-  "https://studyos-ai.vercel.app";
+// Always redirect to a single auth domain so sessions are never split.
+// Localhost uses the request origin (avoid redirecting to production when
+// developing locally), everything else uses the app URL.
+function getBaseUrl(url: URL): string {
+  const hostname = url.hostname;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return url.origin;
+  }
+  return process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "https://studyos-ai.vercel.app";
+}
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -13,13 +19,16 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/dashboard";
 
+  const baseUrl = getBaseUrl(url);
+  const isLocal = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+
   if (!code) {
-    return NextResponse.redirect(`${PRODUCTION_URL}/login?error=no_code`);
+    return NextResponse.redirect(`${baseUrl}/login?error=no_code`);
   }
 
   const redirectTo = next.startsWith("/") ? next : `/${next}`;
-  const successRedirect = `${PRODUCTION_URL}${redirectTo}`;
-  const errorRedirect = `${PRODUCTION_URL}/login?error=auth`;
+  const successRedirect = `${baseUrl}${redirectTo}`;
+  const errorRedirect = `${baseUrl}/login?error=auth`;
 
   // Build the response we will return. We MUST set session cookies on THIS
   // response so the browser receives them; cookieStore.set() in route handlers
@@ -36,7 +45,11 @@ export async function GET(request: Request) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
+            response.cookies.set(name, value, {
+              ...options,
+              sameSite: "lax",
+              secure: !isLocal,
+            })
           );
         },
       },

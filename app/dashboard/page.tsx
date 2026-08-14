@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getUserDocuments, getOrCreateUser } from "@/lib/db";
+import { getUserDocuments, getOrFetchUser } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import {
   Plus,
@@ -33,23 +33,20 @@ export default async function DashboardPage() {
 
   if (!authUser) redirect("/login");
 
-  let userDetails;
-  try {
-    userDetails = await getOrCreateUser({
+  const userDetails =
+    (await getOrFetchUser({
       id: authUser.id,
       email: authUser.email!,
       display_name:
         authUser.user_metadata.full_name || authUser.email!.split("@")[0],
-    });
-  } catch (e) {
-    userDetails = {
+    })) ??
+    ({
       plan_type: "free",
       ai_credits_used_today: 0,
       display_name: authUser.email!.split("@")[0],
       study_streak: 0,
       longest_streak: 0,
-    };
-  }
+    } as any);
 
   const documents = await getUserDocuments(authUser.id);
 

@@ -140,16 +140,21 @@ export function Editor({ initialDocument, userId }: EditorProps) {
         if (!res.ok) { toast.error(data.error || "Generation failed"); return; }
         try {
           const parsed = JSON.parse(data.result);
-          if (Array.isArray(parsed)) {
-            setFlashcards(parsed);
+          const cards = Array.isArray(parsed)
+            ? parsed
+            : Array.isArray(parsed?.flashcards)
+              ? parsed.flashcards
+              : null;
+          if (cards) {
+            setFlashcards(cards);
             setShowFlashcards(true);
             setCurrentFlashcardIndex(0);
             setFlashcardFlipped(false);
             await fetch("/api/flashcards", {
               method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ documentId: initialDocument.id, flashcards: parsed }),
+              body: JSON.stringify({ documentId: initialDocument.id, flashcards: cards }),
             });
-            toast.success(`${parsed.length} flashcards created`);
+            toast.success(`${cards.length} flashcards created`);
           } else { setAiOutput(data.result); }
         } catch { setAiOutput(data.result); }
       } else {

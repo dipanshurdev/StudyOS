@@ -1,5 +1,10 @@
 "use server";
 
+import { AILimitError } from "./ai-errors";
+
+const REQUEST_TIMEOUT_MS = 60_000;
+const MAX_CONTENT_LENGTH = 50_000;
+
 async function getAIKeys() {
   return {
     GROQ_API_KEY:
@@ -7,7 +12,22 @@ async function getAIKeys() {
     HUGGINGFACE_API_KEY:
       process.env.HUGGINGFACE_API_KEY ||
       process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY,
+    GROQ_MODEL: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
+    GROQ_FALLBACK_MODEL: process.env.GROQ_FALLBACK_MODEL || "llama-3.3-70b-versatile",
   };
+}
+
+function extractJson(text: string): string {
+  if (typeof text !== "string") return "";
+  const codeFence = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (codeFence) return codeFence[1].trim();
+  const objStart = text.indexOf("{");
+  const objEnd = text.lastIndexOf("}");
+  if (objStart !== -1 && objEnd > objStart) return text.slice(objStart, objEnd + 1).trim();
+  const arrStart = text.indexOf("[");
+  const arrEnd = text.lastIndexOf("]");
+  if (arrStart !== -1 && arrEnd > arrStart) return text.slice(arrStart, arrEnd + 1).trim();
+  return text.trim();
 }
 
 interface AIPrompt {
@@ -72,7 +92,7 @@ Format your response as a JSON array of objects with "front" and "back" keys. Ex
   {"front": "Define mitosis", "back": "Cell division that results in two identical daughter cells..."}
 ]
 
-Return ONLY valid JSON, no additional text.`,
+Return ONLY the JSON array itself, no surrounding object or wrapper, no additional text.`,
 
   mindmap: (content: string) => `
 You are an expert at creating visual learning structures. Based on the following content, generate a mind map structure that organizes the information hierarchically.
@@ -126,8 +146,11 @@ Provide a helpful, encouraging response that helps them learn.`;
   },
 };
 
-async function callGroq(prompt: string): Promise<string> {
-  const { GROQ_API_KEY } = await getAIKeys();
+async function callGroq(
+  prompt: string,
+  opts?: { json?: boolean; model?: string },
+): Promise<string> {
+  const { GROQ_API_KEY, GROQ_MODEL } = await getAIKeys();
   if (!GROQ_API_KEY) {
     throw new Error("GROQ_API_KEY is not configured");
   }
@@ -142,7 +165,7 @@ async function callGroq(prompt: string): Promise<string> {
           Authorization: `Bearer ${GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
+          model: opts?.model || GROQ_MODEL,
           messages: [
             {
               role: "user",
@@ -151,14 +174,16 @@ async function callGroq(prompt: string): Promise<string> {
           ],
           max_tokens: 2000,
           temperature: 0.7,
+          ...(opts?.json ? { response_format: { type: "json_object" } } : {}),
         }),
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       },
     );
 
     if (!response.ok) {
-      const error = await response.json();
+      const error = await response.json().catch(() => null);
       throw new Error(
-        `Groq API error: ${response.status} - ${error.error?.message || "Unknown error"}`,
+        `Groq API error: ${response.status} - ${error?.error?.message || "Unknown error"}`,
       );
     }
 
@@ -197,6 +222,7 @@ async function callHuggingFace(prompt: string): Promise<string> {
             do_sample: true,
           },
         }),
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       },
     );
 
@@ -239,14 +265,15 @@ export async function generateAIResponse(
   conversationHistory?: Array<{ role: string; content: string }>,
 ): Promise<string> {
   if (!content.trim()) {
-    throw new Error(
+    throw new AILimitError(
       "Content cannot be empty. Please paste some study material.",
     );
   }
 
-  if (content.length > 20000) {
-    throw new Error(
-      "Content is too long (max 20,000 characters). Please use shorter content.",
+  if (content.length > MAX_CONTENT_LENGTH) {
+    throw new AILimitError(
+      `Content is too long (max ${MAX_CONTENT_LENGTH.toLocaleString()} characters). Please use shorter content.`,
+      413,
     );
   }
 
@@ -255,26 +282,42 @@ export async function generateAIResponse(
       ? prompts[action](content, conversationHistory)
       : prompts[action](content);
 
+  const wantsJson = action === "flashcards" || action === "mindmap";
+  const { GROQ_FALLBACK_MODEL } = await getAIKeys();
+
   try {
     console.log(" Attempting Groq API call for action:", action);
-    const result = await callGroq(prompt);
+    const result = await callGroq(prompt, { json: wantsJson });
     console.log(" Groq API successful");
-    return result;
+    return wantsJson ? extractJson(result) : result;
   } catch (groqError) {
     console.warn(
-      " Groq failed, attempting HuggingFace fallback:",
+      " Groq failed, attempting Groq fallback model:",
       groqError,
     );
     try {
-      console.log(" Attempting HuggingFace fallback for action:", action);
-      const result = await callHuggingFace(prompt);
-      console.log(" HuggingFace fallback successful");
-      return result;
-    } catch (hfError) {
-      console.error(" Both AI services failed:", hfError);
-      throw new Error(
-        "AI services are temporarily unavailable. Please try again in a moment. This usually resolves quickly.",
+      const result = await callGroq(prompt, {
+        json: wantsJson,
+        model: GROQ_FALLBACK_MODEL,
+      });
+      console.log(" Groq fallback model successful");
+      return wantsJson ? extractJson(result) : result;
+    } catch (secondGroqError) {
+      console.warn(
+        " Groq fallback failed, attempting HuggingFace:",
+        secondGroqError,
       );
+      try {
+        console.log(" Attempting HuggingFace fallback for action:", action);
+        const result = await callHuggingFace(prompt);
+        console.log(" HuggingFace fallback successful");
+        return wantsJson ? extractJson(result) : result;
+      } catch (hfError) {
+        console.error(" All AI services failed:", hfError);
+        throw new Error(
+          "AI services are temporarily unavailable. Please try again in a moment. This usually resolves quickly.",
+        );
+      }
     }
   }
 }

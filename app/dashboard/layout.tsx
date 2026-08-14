@@ -3,7 +3,7 @@ import { ModernSidebar } from "@/components/dashboard/modern-sidebar";
 import { CommandPalette } from "@/components/dashboard/command-palette";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getOrCreateUser } from "@/lib/db";
+import { getOrFetchUser } from "@/lib/db";
 
 export default async function DashboardLayout({
   children,
@@ -19,20 +19,17 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  let userDetails;
-  try {
-    userDetails = await getOrCreateUser({
+  const userDetails =
+    (await getOrFetchUser({
       id: user.id,
       email: user.email!,
       display_name:
         user.user_metadata?.full_name || user.email?.split("@")[0] || "Student",
-    });
-  } catch (e) {
-    userDetails = {
+    })) ??
+    ({
       plan_type: "free",
       display_name: user.email?.split("@")[0] || "Student",
-    };
-  }
+    } as any);
 
   const userData = {
     email: user.email,

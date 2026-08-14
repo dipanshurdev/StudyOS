@@ -93,6 +93,24 @@ export async function getOrCreateUser(user: {
   }
 }
 
+// Read-mostly path for server components: avoids a write (upsert) on every
+// page navigation. Only creates the record when it does not exist yet.
+export async function getOrFetchUser(user: {
+  id: string;
+  email: string;
+  display_name: string;
+}): Promise<User | null> {
+  const existing = await getUserById(user.id);
+  if (existing) return existing;
+
+  try {
+    return await getOrCreateUser(user);
+  } catch (error) {
+    console.error("Error creating user record:", error);
+    return null;
+  }
+}
+
 export async function getUserDocuments(userId: string): Promise<Document[]> {
   const { data, error } = await supabaseAdmin
     .from("documents")
